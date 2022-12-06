@@ -1,13 +1,27 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-background: 19 23 32;
+  --color-text: 237 249 248;
+  --color-primary: 70 231 144;
+  --color-primary-alt: 161 239 151;
+  --color-secondary: 166 146 241;
+  --color-secondary-alt: 209 183 242;
+  --color-accent: 238 252 127;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+@layer {
+  div,
+  span {
+    @apply text-text bg-background;
+  }
+
 }
