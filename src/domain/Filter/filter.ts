@@ -6,5 +6,5 @@ export abstract class Filter<T, K = T> {
 
   matches(testValue: T) {
     return Object.is(testValue, this.config);
-  };
+  }
 }

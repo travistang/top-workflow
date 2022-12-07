@@ -1,77 +1,56 @@
 import TaskRepository from "../repositories/TaskRepository";
-import { caseInsensitiveInclude } from "../utils/strings";
 
 export enum TaskState {
-  Pending = 'pending',
-  Completed = 'completed',
-  Ignored = 'ignored',
-  Blocked = 'blocked',
-};
+  Pending = "pending",
+  Completed = "completed",
+  Ignored = "ignored",
+  Blocked = "blocked",
+}
 
 export interface TaskDTO {
   id: string;
   name: string;
+  parentId?: string;
   labels: string[];
   description: string;
   createdAt: number;
   modifiedAt: number;
-  subTasksId: string[];
   state: TaskState;
   history: {
     state: TaskState;
     date: number;
   }[];
-};
+}
 
-export class Task implements TaskDTO {
-  id: string;
-  name: string;
-  labels: string[];
-  description: string;
-  createdAt: number;
-  modifiedAt: number;
-  subTasksId: string[];
-  subTasks: Task[];
-  state: TaskState;
-  history: {
-    state: TaskState;
-    date: number;
-  }[];
-
+export class Task {
+  data: TaskDTO;
   constructor(taskDTO: TaskDTO) {
-    this.id = taskDTO.id;
-    this.name = taskDTO.name;
-    this.labels = taskDTO.labels;
-    this.description = taskDTO.description;
-    this.createdAt = taskDTO.createdAt;
-    this.modifiedAt = taskDTO.modifiedAt;
-    this.subTasksId = taskDTO.subTasksId;
-    this.state = taskDTO.state;
-    this.history = taskDTO.history;
-    this.subTasks = [];
+    this.data = taskDTO;
   }
 
-  toDTO(): TaskDTO {
-    return {
-      id: this.id,
-      name: this.name,
-      labels: this.labels,
-      description: this.description,
-      createdAt: this.createdAt,
-      modifiedAt: this.modifiedAt,
-      state: this.state,
-      history: this.history,
-      subTasksId: this.subTasksId,
-    };
-  }
-
-  static from(taskDTO: Omit<TaskDTO, "id">): Task {
+  static from(taskDTO: Partial<Omit<TaskDTO, "id">>): Task {
     const id = window.crypto.randomUUID();
-    return new Task({ ...taskDTO, id });
+    const defaultDto: TaskDTO = {
+      id,
+      name: "",
+      labels: [],
+      description: "",
+      createdAt: Date.now(),
+      modifiedAt: Date.now(),
+      state: TaskState.Pending,
+      history: [
+        {
+          state: TaskState.Pending,
+          date: Date.now(),
+        },
+      ],
+    };
+    return new Task({ ...defaultDto, ...taskDTO, id });
   }
 
-  async populateSubTasks() {
-    const subTasks = await Promise.all(this.subTasksId.map(id => TaskRepository.get(id)));
-    this.tasks
+  async subTasks(): Promise<Task[]> {
+    return TaskRepository.find({
+      parentId: { equals: this.data.id },
+    });
   }
 }
