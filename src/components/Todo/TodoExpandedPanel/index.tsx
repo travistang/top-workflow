@@ -18,7 +18,7 @@ export default function TodoExpandedPanel({
   className,
 }: Props) {
   const taskManager = useTaskManager();
-  const expandedTodoId = useRecoilValue(expandedTaskAtom);
+  const expandedTodoIds = useRecoilValue(expandedTaskAtom);
   const onAddNewTask = async (subTaskName: string) => {
     await taskManager.createTask(subTaskName, task.id);
   };
@@ -40,7 +40,7 @@ export default function TodoExpandedPanel({
           />
         </div>
       ))}
-      {expandedTodoId === task.id && (
+      {expandedTodoIds.includes(task.id) && (
         <>
           <CreateTaskPanel className="h-12 w-full" onAddTask={onAddNewTask} />
         </>

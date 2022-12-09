@@ -14,12 +14,8 @@ type Props = {
 };
 export default function TodoItem({ task, className }: Props) {
   const taskManager = useTaskManager();
-  const [expandedTodoId, setExpandedTodoId] = useRecoilState(expandedTaskAtom);
-  const allTasksInvolved = taskManager
-    .getTasksUnderTask(task)
-    .map((task) => task.id) as (string | null)[];
-
-  const expanded = [task.id, ...allTasksInvolved].includes(expandedTodoId);
+  const [expandedTodoIds, setExpandedTodoId] = useRecoilState(expandedTaskAtom);
+  const expanded = expandedTodoIds.includes(task.id);
 
   const toggleCompleted = () => {
     taskManager.update(task.id, {
@@ -32,11 +28,10 @@ export default function TodoItem({ task, className }: Props) {
   };
   const toggleExpanded = () => {
     if (!expanded) {
-      setExpandedTodoId(task.id);
+      setExpandedTodoId([...expandedTodoIds, task.id]);
       return;
     }
-    const nextExpandTodoId = task.parentId ?? null;
-    setExpandedTodoId(nextExpandTodoId);
+    setExpandedTodoId(expandedTodoIds.filter((id) => id !== task.id));
   };
   return (
     <div
