@@ -2,20 +2,18 @@ import React, { useState } from "react";
 import { VscAdd, VscClose, VscCheck } from "react-icons/vsc";
 import classNames from "classnames";
 import Button from "../Input/Button";
-import useTaskManager from "../../domain/TaskManager";
-import { Task } from "../../entities/Task";
 
 type Props = {
   className?: string;
+  onAddTask: (taskName: string) => void;
 };
-export default function CreateTaskPanel({ className }: Props) {
+export default function CreateTaskPanel({ className, onAddTask }: Props) {
   const [adding, setAdding] = useState(false);
   const [newTaskName, setNewTaskName] = useState("");
-  const taskManager = useTaskManager();
 
   const addTask = () => {
-    const task = Task.from({ name: newTaskName });
-    taskManager.upsert(task);
+    if (!newTaskName) return;
+    onAddTask(newTaskName);
     setAdding(false);
     setNewTaskName("");
   };
@@ -35,7 +33,12 @@ export default function CreateTaskPanel({ className }: Props) {
     );
   }
   return (
-    <div className={classNames("flex items-center gap-2 p-2", className)}>
+    <div
+      className={classNames(
+        "flex items-center gap-2 p-2 bg-opacity-10",
+        className
+      )}
+    >
       <input
         placeholder="Something describing your new task..."
         className="outline-none focus:outline-primary placeholder:text-xs flex-1 rounded-lg border-none px-2 bg-text bg-opacity-20 h-12"

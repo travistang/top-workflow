@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import classNames from "classnames";
 
 type Props = {
@@ -7,9 +7,14 @@ type Props = {
   children: React.ReactNode;
 };
 export default function Button({ children, className, onClick }: Props) {
+  const guardedOnClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onClick();
+  };
+
   return (
     <button
-      onClick={onClick}
+      onClick={guardedOnClick}
       className={classNames("flex items-center justify-center", className)}
     >
       {children}

@@ -5,7 +5,7 @@ import {
   SortOrder,
 } from "../domain/Filter/SortConfig";
 import TaskFilter, { TaskFilterConfig } from "../domain/Filter/TaskFilter";
-import { Task, TaskDTO } from "../entities/Task";
+import { TaskDTO, TaskState } from "../entities/Task";
 
 class TaskRepository extends Dexie {
   tasks!: Table<TaskDTO>;
@@ -18,13 +18,28 @@ class TaskRepository extends Dexie {
   }
 
   async get(id: string) {
-    const taskDto = await this.tasks.get(id);
-    if (!taskDto) return null;
-    return new Task(taskDto);
+    return this.tasks.get(id);
   }
 
   add(dto: TaskDTO) {
     return this.tasks.add(dto);
+  }
+
+  async createTaskByName(name: string, parentId?: string) {
+    const now = Date.now();
+    const newTaskDto: TaskDTO = {
+      name,
+      parentId,
+      description: "",
+      labels: [],
+      createdAt: now,
+      modifiedAt: now,
+      state: TaskState.Pending,
+      history: [{ state: TaskState.Pending, date: now }],
+      id: window.crypto.randomUUID(),
+    };
+    await this.add(newTaskDto);
+    return newTaskDto;
   }
 
   update(id: string, dto: TaskDTO) {
@@ -33,8 +48,8 @@ class TaskRepository extends Dexie {
 
   async upsert(dto: TaskDTO) {
     const id = dto.id;
-    const existingId = await this.get(id);
-    if (existingId) {
+    const existingRecord = await this.get(id);
+    if (existingRecord) {
       return this.update(id, dto);
     } else {
       return this.add(dto);
@@ -45,7 +60,7 @@ class TaskRepository extends Dexie {
     return this.tasks.delete(id);
   }
 
-  private buildFilter(taskFilter: TaskFilter, sorting: SortConfig<Task>) {
+  private buildFilter(taskFilter: TaskFilter, sorting: SortConfig<TaskDTO>) {
     let filter = this.tasks.filter((task) => taskFilter.matches(task));
     if (sorting.limit) {
       filter = filter.limit(sorting.limit);
@@ -62,11 +77,11 @@ class TaskRepository extends Dexie {
 
   async find(
     filterConfig: TaskFilterConfig = {},
-    sorting: SortConfig<Task> = getDefaultSortConfig()
+    sorting: SortConfig<TaskDTO> = getDefaultSortConfig()
   ) {
     const taskFilter = new TaskFilter(filterConfig);
     const taskDtos = await this.buildFilter(taskFilter, sorting);
-    return taskDtos.map((dto) => new Task(dto));
+    return taskDtos;
   }
 }
 
