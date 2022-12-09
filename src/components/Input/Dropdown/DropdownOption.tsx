@@ -20,7 +20,7 @@ export default function DropdownOption<T>({
       className={classNames(
         "flex items-center gap-2 bg-opacity-0",
         className,
-        selected && "bg-primary bg-opacity-20"
+        selected && "bg-text bg-opacity-20 -mx-2 px-2"
       )}
     >
       {icon}

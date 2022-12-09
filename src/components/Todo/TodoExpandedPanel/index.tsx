@@ -31,7 +31,10 @@ export default function TodoExpandedPanel({
       )}
     >
       {taskManager.getAllSubTasks(task).map((subTask) => (
-        <div className="flex flex-row flex-shrink-0 p-2 bg-opacity-10">
+        <div
+          className="flex flex-row flex-shrink-0 p-2 bg-opacity-10"
+          key={subTask.id}
+        >
           <Todo
             depth={depth + 1}
             task={subTask}

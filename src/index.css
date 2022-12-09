@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -7,6 +7,7 @@
 :root {
   --color-background: 19 23 32;
   --color-text: 237 249 248;
+  --color-text-secondary: 38 41 48;
   --color-primary: 70 231 144;
   --color-primary-alt: 161 239 151;
   --color-secondary: 166 146 241;
@@ -15,7 +16,7 @@
 }
 
 * {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
 }
 
 @layer {
@@ -23,5 +24,4 @@
   span {
     @apply text-text bg-background;
   }
-
 }

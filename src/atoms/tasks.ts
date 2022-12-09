@@ -15,7 +15,6 @@ const getAtomDefaultValue = async () => {
   const tasksMappingById = Object.fromEntries(
     pendingTasksByDate.map((task) => [task.id, task])
   );
-  console.log({ tasksMappingById });
   return tasksMappingById;
 };
 

@@ -43,7 +43,7 @@ export default function Dropdown<T>({
           {selectedOption && <DropdownOption option={selectedOption} />}
         </div>
         {expanded && (
-          <div className="absolute top-full translate-y-1 w-full left-0 flex flex-col items-stretch gap-2 p-2 rounded-lg bg-text bg-opacity-20">
+          <div className="absolute top-full translate-y-1 w-full left-0 flex flex-col items-stretch gap-2 p-2 rounded-lg bg-text-secondary">
             {options.map((option) => (
               <DropdownOption
                 selected={option.value === value}
