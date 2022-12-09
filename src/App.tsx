@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import TodoListPage from "./pages/TodoListPage";
+import TaskDetailModal from "./components/TaskDetailModal";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
               <Route path="/flow" element={<>Flow</>} />
             </Routes>
           </div>
+          <TaskDetailModal />
           <Footer />
         </div>
       </Router>

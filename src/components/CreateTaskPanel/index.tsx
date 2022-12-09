@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { VscAdd, VscClose, VscCheck } from "react-icons/vsc";
 import classNames from "classnames";
 import Button from "../Input/Button";
+import TextInput from "../Input/TextInput";
 
 type Props = {
   className?: string;
@@ -39,11 +40,10 @@ export default function CreateTaskPanel({ className, onAddTask }: Props) {
         className
       )}
     >
-      <input
-        placeholder="Something describing your new task..."
-        className="outline-none focus:outline-primary placeholder:text-xs flex-1 rounded-lg border-none px-2 bg-text bg-opacity-20 h-12"
+      <TextInput
         value={newTaskName}
-        onChange={(e) => setNewTaskName(e.target.value)}
+        onChange={setNewTaskName}
+        placeholder="Something describing your new task..."
       />
       <Button className="w-12" onClick={addTask}>
         <VscCheck className="text-lg text-primary" />
