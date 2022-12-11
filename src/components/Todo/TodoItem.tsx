@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import { format } from "date-fns";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { expandedTaskAtom, useToggleExpandAll } from "../../atoms/expandedTask";
 import useTaskManager from "../../domain/TaskManager";
@@ -7,6 +8,8 @@ import { TaskDTO, TaskState } from "../../entities/Task";
 import Checkbox from "../Input/Checkbox";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
 import TodoActionMenu from "./TodoActionMenu";
+import { VscWarning } from "react-icons/vsc";
+import DueDateText from "./DueDateText";
 
 type Props = {
   task: TaskDTO;
@@ -57,7 +60,11 @@ export default function TodoItem({
         checked={task.state === TaskState.Completed}
         onCheck={toggleCompleted}
       />
-      <span className="bg-opacity-0">{task.name}</span>
+
+      <div className="flex flex-col">
+        <span className="bg-opacity-0">{task.name}</span>
+        {task.dueDate && <DueDateText dueDate={task.dueDate} />}
+      </div>
       <TodoActionMenu
         taskId={task.id}
         onRequestCreateSubTask={onRequestCreateSubTask}

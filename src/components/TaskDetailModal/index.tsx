@@ -41,7 +41,7 @@ export default function TaskDetailModal() {
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 flex flex-col justify-end items-stretch backdrop-blur-lg bg-background bg-opacity-20 sm:justify-center sm:px-[10vw]"
+      className="z-40 fixed inset-0 flex flex-col justify-end items-stretch backdrop-blur-lg bg-background bg-opacity-20 sm:justify-center sm:px-[10vw]"
     >
       <div className="flex items-center justify-end py-2 bg-opacity-0">
         <Button onClick={onClose} className="w-8 h-8">
