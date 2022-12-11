@@ -5,15 +5,21 @@ import DropdownOption from "./DropdownOption";
 import { Option } from "./types";
 
 type Props<T> = {
+  inputClassName?: string;
+  dropdownClassName?: string;
   className?: string;
+  children?: React.ReactNode;
   label?: string;
   value: T;
-  onSelect: (value: T) => void;
+  onSelect?: (value: T) => void;
   options: Option<T>[];
 };
 export default function Dropdown<T>({
   options,
   className,
+  inputClassName,
+  children,
+  dropdownClassName,
   label,
   value,
   onSelect,
@@ -21,7 +27,7 @@ export default function Dropdown<T>({
   const [expanded, setExpanded] = useState(false);
   const selectedOption = options.find((opt) => opt.value === value);
   const onSelectWithClose = (value: T) => {
-    onSelect(value);
+    onSelect?.(value);
     setExpanded(false);
   };
   return (
@@ -31,19 +37,28 @@ export default function Dropdown<T>({
     >
       <div
         className={classNames(
-          "relative flex flex-col gap-2 items-stretch",
+          "relative bg-opacity-0 flex flex-col gap-2 items-stretch",
           className
         )}
       >
         {label && <label className="text-xs">{label}</label>}
         <div
           onClick={() => setExpanded(!expanded)}
-          className="rounded-lg min-h-[36px] w-full px-2 bg-text bg-opacity-20 flex items-center"
+          className={classNames(
+            "rounded-lg min-h-[36px] w-full px-2 flex items-center",
+            inputClassName ?? "bg-text bg-opacity-20"
+          )}
         >
-          {selectedOption && <DropdownOption option={selectedOption} />}
+          {children ??
+            (selectedOption && <DropdownOption option={selectedOption} />)}
         </div>
         {expanded && (
-          <div className="absolute top-full translate-y-1 w-full left-0 flex flex-col items-stretch gap-2 p-2 rounded-lg bg-text-secondary">
+          <div
+            className={classNames(
+              "absolute top-full translate-y-1 w-full left-0 flex flex-col items-stretch gap-2 p-2 rounded-lg bg-text-secondary",
+              dropdownClassName
+            )}
+          >
             {options.map((option) => (
               <DropdownOption
                 selected={option.value === value}

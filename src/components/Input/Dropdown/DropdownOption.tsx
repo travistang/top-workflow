@@ -14,9 +14,13 @@ export default function DropdownOption<T>({
   option,
 }: Props<T>) {
   const { label, icon, className } = option;
+  const clickHandler = () => {
+    onClick?.(option.value);
+    option.onSelect?.();
+  };
   return (
     <div
-      onClick={() => onClick?.(option.value)}
+      onClick={clickHandler}
       className={classNames(
         "flex items-center gap-2 bg-opacity-0",
         className,

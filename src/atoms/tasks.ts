@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { atom, selectorFamily } from "recoil";
 import { SortOrder } from "../domain/Filter/SortConfig";
 import { TaskDTO } from "../entities/Task";
 import TaskRepository from "../repositories/TaskRepository";
@@ -23,4 +23,11 @@ const taskAtom = atom<TaskAtomValue>({
   default: getAtomDefaultValue(),
 });
 
+export const subTaskAtom = selectorFamily<TaskDTO[], string>({
+  key: "subtask-family",
+  get:
+    (taskId) =>
+    ({ get }) =>
+      Object.values(get(taskAtom)).filter((task) => task.parentId === taskId),
+});
 export default taskAtom;

@@ -1,11 +1,8 @@
 import classNames from "classnames";
 import React from "react";
-import { useRecoilValue } from "recoil";
 import Todo from "..";
-import { expandedTaskAtom } from "../../../atoms/expandedTask";
 import useTaskManager from "../../../domain/TaskManager";
 import { TaskDTO } from "../../../entities/Task";
-import CreateTaskPanel from "../../CreateTaskPanel";
 
 type Props = {
   task: TaskDTO;
@@ -18,10 +15,6 @@ export default function TodoExpandedPanel({
   className,
 }: Props) {
   const taskManager = useTaskManager();
-  const expandedTodoIds = useRecoilValue(expandedTaskAtom);
-  const onAddNewTask = async (subTaskName: string) => {
-    await taskManager.createTask(subTaskName, task.id);
-  };
   return (
     <div
       data-component="todo-expanded-panel"
@@ -43,11 +36,6 @@ export default function TodoExpandedPanel({
           />
         </div>
       ))}
-      {expandedTodoIds.includes(task.id) && (
-        <>
-          <CreateTaskPanel className="h-12 w-full" onAddTask={onAddNewTask} />
-        </>
-      )}
     </div>
   );
 }

@@ -5,7 +5,9 @@ import { useRecoilState } from "recoil";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
 import useTaskManager from "../../domain/TaskManager";
 import { TaskDTO } from "../../entities/Task";
+import { Modifier } from "../../utils/object";
 import Button from "../Input/Button";
+import DateInput from "../Input/Dropdown/DateInput";
 import TaskStateDropdown from "../Input/TaskStateDropdown";
 import TextInput from "../Input/TextInput";
 
@@ -27,6 +29,13 @@ export default function TaskDetailModal() {
   const onCommitChanges = () => {
     taskManager.upsert(taskPlaceHolder);
     onClose();
+  };
+
+  const updatePlaceHolder: Modifier<TaskDTO> = (field) => (value) => {
+    setTaskPlaceholder({
+      ...taskPlaceHolder,
+      [field]: value,
+    });
   };
 
   return (
@@ -58,11 +67,17 @@ export default function TaskDetailModal() {
             setTaskPlaceholder({ ...taskPlaceHolder, state: newState })
           }
         />
+        <DateInput
+          label="Due date"
+          className="col-span-3 bg-opacity-0"
+          value={taskPlaceHolder.dueDate}
+          onChange={updatePlaceHolder("dueDate")}
+        />
         <Button
           onClick={onClose}
           className={classNames(
             "col-start-1 col-span-3 bg-text bg-opacity-5 text-text gap-2 sm:rounded-lg -mb-4 -ml-4 h-12 -mr-2",
-            "sm:col-span-2 sm:h-10 sm:mt-4 sm:mb-0 sm:ml-0 sm:mr-0"
+            "sm:col-start-1 sm:col-span-2 sm:h-10 sm:mt-4 sm:mb-0 sm:ml-0 sm:mr-0"
           )}
         >
           <VscRemove />

@@ -1,4 +1,5 @@
 import { atom, useRecoilState, useRecoilValue } from "recoil";
+import { addWithoutRepeat, toggleElement } from "../utils/array";
 import taskAtom from "./tasks";
 
 export const expandedTaskAtom = atom<string[]>({
@@ -6,6 +7,21 @@ export const expandedTaskAtom = atom<string[]>({
   default: [],
 });
 
+export const useExpandTask = (taskId: string, forceState?: boolean) => {
+  const [expandedTasksId, setExpandedTaskAtom] =
+    useRecoilState(expandedTaskAtom);
+
+  return () => {
+    if (forceState !== undefined) {
+      const newExpandedTasksId = forceState
+        ? addWithoutRepeat(expandedTasksId, taskId)
+        : expandedTasksId.filter((id) => id !== taskId);
+      setExpandedTaskAtom(newExpandedTasksId);
+      return;
+    }
+    setExpandedTaskAtom(toggleElement(expandedTasksId, taskId));
+  };
+};
 export const useToggleExpandAll = (toggleTaskId: string) => {
   const tasksMap = useRecoilValue(taskAtom);
   const [expandedTasksId, setExpandedTaskAtom] =

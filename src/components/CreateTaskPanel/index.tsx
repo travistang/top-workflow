@@ -7,9 +7,14 @@ import TextInput from "../Input/TextInput";
 type Props = {
   className?: string;
   onAddTask: (taskName: string) => void;
+  opened?: boolean;
 };
-export default function CreateTaskPanel({ className, onAddTask }: Props) {
-  const [adding, setAdding] = useState(false);
+export default function CreateTaskPanel({
+  className,
+  onAddTask,
+  opened,
+}: Props) {
+  const [adding, setAdding] = useState(opened ?? false);
   const [newTaskName, setNewTaskName] = useState("");
 
   const addTask = () => {

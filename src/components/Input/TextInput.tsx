@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import React from "react";
+import Label from "./Label";
 
 type Props = {
   value: string;
@@ -19,11 +20,7 @@ export default function TextInput({
 }: Props) {
   return (
     <div className={classNames("flex flex-col gap-2 bg-opacity-0", className)}>
-      {label && (
-        <span className="text-xs bg-opacity-0 bg-background items-center">
-          {label}
-        </span>
-      )}
+      <Label text={label} />
       <input
         placeholder={placeholder}
         className={classNames(

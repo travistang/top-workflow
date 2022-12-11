@@ -22,6 +22,6 @@
 @layer {
   div,
   span {
-    @apply text-text bg-background;
+    @apply text-text;
   }
 }
