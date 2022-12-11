@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TaskDTO } from "../../entities/Task";
+import { TaskDTO, TaskState } from "../../entities/Task";
 import TodoExpandedPanel from "./TodoExpandedPanel";
 import { useRecoilState } from "recoil";
 import { expandedTaskAtom, useExpandTask } from "../../atoms/expandedTask";
@@ -7,6 +7,7 @@ import TodoItem from "./TodoItem";
 import classNames from "classnames";
 import CreateTaskPanel from "../CreateTaskPanel";
 import useTaskManager from "../../domain/TaskManager";
+import { TaskStateColorMapping } from "../../domain/TaskState";
 
 type Props = {
   task: TaskDTO;
@@ -24,12 +25,17 @@ export default function Todo({ task, className, depth = 1 }: Props) {
     forceExpand();
   };
   const expanded = expandedTodoIds.includes(task.id);
+  const shouldShowStateColor = task.state !== TaskState.Pending;
+  const backgroundColorByState = shouldShowStateColor
+    ? TaskStateColorMapping[task.state].background
+    : undefined;
   return (
     <div
       data-component="todo"
       onClick={(e) => e.stopPropagation()}
       className={classNames(
-        "rounded-lg p-2 flex flex-col items-stretch bg-opacity-10",
+        "rounded-lg px-2 flex flex-col items-stretch bg-opacity-10",
+        backgroundColorByState,
         className
       )}
     >

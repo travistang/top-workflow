@@ -10,7 +10,7 @@ export default function TodoListPage() {
   };
 
   return (
-    <div className="flex flex-col items-stretch gap-2 overflow-x-visible bg-background">
+    <div className="flex flex-col items-stretch gap-1 overflow-x-visible bg-background">
       {taskManager.getAllParentTasks().map((task) => (
         <Todo key={task.id} task={task} />
       ))}

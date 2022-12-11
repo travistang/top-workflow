@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  VscRefresh,
-  VscCheck,
-  VscStopCircle,
-  VscSyncIgnored,
-} from "react-icons/vsc";
+import { capitalize } from "../../utils/strings";
+import { TaskStateColorMapping } from "../../domain/TaskState";
 import { TaskState } from "../../entities/Task";
 import Dropdown from "./Dropdown";
 
@@ -15,46 +11,18 @@ type Props = {
   label?: string;
 };
 
-const TaskStateOptionMapping: Record<
-  TaskState,
-  {
-    label: string;
-    icon: React.ReactNode;
-    className: string;
-  }
-> = {
-  [TaskState.Pending]: {
-    label: "Pending",
-    icon: <VscRefresh />,
-    className: "text-text",
-  },
-  [TaskState.Blocked]: {
-    label: "Blocked",
-    icon: <VscStopCircle />,
-    className: "text-accent",
-  },
-  [TaskState.Ignored]: {
-    label: "Ignored",
-    icon: <VscSyncIgnored />,
-    className: "text-secondary",
-  },
-  [TaskState.Completed]: {
-    label: "Completed",
-    icon: <VscCheck />,
-    className: "text-primary",
-  },
-};
-
 export default function TaskStateDropdown({
   className,
   value,
   label,
   onChange,
 }: Props) {
-  const options = Object.entries(TaskStateOptionMapping).map(
+  const options = Object.entries(TaskStateColorMapping).map(
     ([taskState, options]) => ({
       value: taskState as TaskState,
-      ...options,
+      icon: options.icon,
+      className: options.text,
+      label: capitalize(taskState as string),
     })
   );
   return (
