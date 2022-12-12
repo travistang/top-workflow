@@ -42,6 +42,7 @@ export default function Todo({ task, className, depth = 1 }: Props) {
       <TodoItem
         onRequestCreateSubTask={() => setCreatingSubTask(true)}
         task={task}
+        isSubTask={depth > 1}
         className="sticky left-0 bg-opacity-10 h-10 min-w-[100%]"
       />
       {expanded && <TodoExpandedPanel depth={depth} task={task} />}

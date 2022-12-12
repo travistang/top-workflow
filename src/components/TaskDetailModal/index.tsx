@@ -10,6 +10,7 @@ import Button from "../Input/Button";
 import DateInput from "../Input/Dropdown/DateInput";
 import TaskStateDropdown from "../Input/TaskStateDropdown";
 import TextInput from "../Input/TextInput";
+import Modal from "../Modal";
 
 export default function TaskDetailModal() {
   const [taskDetail, setTaskDetail] = useRecoilState(taskDetailModalAtom);
@@ -39,15 +40,7 @@ export default function TaskDetailModal() {
   };
 
   return (
-    <div
-      onClick={onClose}
-      className="z-40 fixed inset-0 flex flex-col justify-end items-stretch backdrop-blur-lg bg-background bg-opacity-20 sm:justify-center sm:px-[10vw]"
-    >
-      <div className="flex items-center justify-end py-2 bg-opacity-0">
-        <Button onClick={onClose} className="w-8 h-8">
-          <VscClose />
-        </Button>
-      </div>
+    <Modal onClose={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
         className="rounded-t-lg sm:rounded-lg p-4 grid grid-cols-6 gap-2 bg-text bg-opacity-5"
@@ -94,6 +87,6 @@ export default function TaskDetailModal() {
           Save changes
         </Button>
       </div>
-    </div>
+    </Modal>
   );
 }
