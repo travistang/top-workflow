@@ -19,6 +19,10 @@
   font-family: "JetBrains Mono", monospace;
 }
 
+*::-webkit-scrollbar {
+  background: transparent;
+}
+
 @layer {
   div,
   span {

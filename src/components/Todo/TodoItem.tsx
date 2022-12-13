@@ -1,61 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { expandedTaskAtom, useToggleExpandAll } from "../../atoms/expandedTask";
-import { TaskDTO } from "../../entities/Task";
-import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
-import TodoActionMenu from "./TodoActionMenu";
+import { TaskDTO, TaskState } from "../../entities/Task";
 import DueDateText from "./DueDateText";
+import TodoActionModal from "./TodoActionModal";
+import { VscAdd, VscKebabVertical } from "react-icons/vsc";
+import { useRecoilValue } from "recoil";
+import { subTaskAtom } from "../../atoms/tasks";
+import ExpandIcon from "./ExpandIcon";
+import { TaskStateColorMapping } from "../../domain/TaskState";
 
 type Props = {
   task: TaskDTO;
   className?: string;
   isSubTask?: boolean;
   onRequestCreateSubTask?: () => void;
+  expanded: boolean;
+  onToggleExpand: () => void;
 };
 export default function TodoItem({
   task,
   onRequestCreateSubTask,
   isSubTask,
+  expanded,
+  onToggleExpand,
   className,
 }: Props) {
-  const { allExpanded, toggleExpandAll } = useToggleExpandAll(task.id);
-  const [expandedTodoIds, setExpandedTodoId] = useRecoilState(expandedTaskAtom);
-  const setTaskDetail = useSetRecoilState(taskDetailModalAtom);
-  const expanded = expandedTodoIds.includes(task.id);
-
-  const openDetailModal = () => {
-    setTaskDetail(task);
-  };
-
-  const toggleExpanded = () => {
-    if (!expanded) {
-      setExpandedTodoId([...expandedTodoIds, task.id]);
-      return;
-    }
-    setExpandedTodoId(expandedTodoIds.filter((id) => id !== task.id));
-  };
-
+  const [actionModalOpened, setActionModalOpened] = useState(false);
+  const hasSubTask = useRecoilValue(subTaskAtom(task.id)).length > 0;
+  const stateIcon = task.state === TaskState.Pending ? null : TaskStateColorMapping[task.state].icon;
   return (
     <div
+      onClick={onToggleExpand}
       className={classNames(
-        "px-2 flex items-center gap-2 z-10",
+        "px-2 flex items-center gap-2",
+        hasSubTask && "cursor-pointer",
+        actionModalOpened && "z-50",
         className ?? ""
       )}
     >
+      <ExpandIcon hasSubTask={hasSubTask} expanded={expanded} />
+      {stateIcon}
       <div className="flex flex-col">
         <span className={classNames("bg-opacity-0", isSubTask && 'text-sm')}>{task.name}</span>
         {task.dueDate && <DueDateText dueDate={task.dueDate} />}
       </div>
-      <TodoActionMenu
-        taskId={task.id}
-        onRequestCreateSubTask={onRequestCreateSubTask}
-        onEditDetails={openDetailModal}
-        expanded={expanded}
-        allExpanded={allExpanded}
-        onToggleAllExpand={toggleExpandAll}
-        onToggleExpand={toggleExpanded}
-      />
+      <VscKebabVertical onClick={() => setActionModalOpened(true)} />
+      <VscAdd onClick={onRequestCreateSubTask} />
+      {actionModalOpened && (
+        <TodoActionModal
+          onRequestCreateSubTask={onRequestCreateSubTask}
+          onClose={() => setActionModalOpened(false)}
+          task={task}
+        />
+      )}
     </div>
   );
 }

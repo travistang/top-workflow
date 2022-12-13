@@ -16,6 +16,7 @@ type Props = {
 };
 export default function Todo({ task, className, depth = 1 }: Props) {
   const [expandedTodoIds] = useRecoilState(expandedTaskAtom);
+  const toggleExpand = useExpandTask(task.id);
   const [creatingSubTask, setCreatingSubTask] = useState(false);
   const forceExpand = useExpandTask(task.id, true);
   const taskManager = useTaskManager();
@@ -34,19 +35,29 @@ export default function Todo({ task, className, depth = 1 }: Props) {
       data-component="todo"
       onClick={(e) => e.stopPropagation()}
       className={classNames(
-        "rounded-lg px-2 flex flex-col items-stretch bg-opacity-10",
-        backgroundColorByState,
+        "rounded-lg px-2 flex flex-col items-stretch min-w-[50vw]",
         className
       )}
     >
       <TodoItem
+        expanded={expanded}
+        onToggleExpand={toggleExpand}
         onRequestCreateSubTask={() => setCreatingSubTask(true)}
         task={task}
         isSubTask={depth > 1}
-        className="sticky left-0 bg-opacity-10 h-10 min-w-[100%]"
+        className={classNames(
+          "rounded-lg sticky left-0 h-8 min-w-[100%] bg-opacity-70",
+          backgroundColorByState,
+
+        )}
       />
       {expanded && <TodoExpandedPanel depth={depth} task={task} />}
-      {creatingSubTask && <CreateTaskPanel onAddTask={onAddNewTask} opened />}
+      {creatingSubTask && (
+        <CreateTaskPanel
+          opened
+          onAddTask={onAddNewTask}
+          onClose={() => setCreatingSubTask(false)} />
+      )}
     </div>
   );
 }

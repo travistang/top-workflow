@@ -8,9 +8,11 @@ type Props = {
   className?: string;
   onAddTask: (taskName: string) => void;
   opened?: boolean;
+  onClose?: () => void;
 };
 export default function CreateTaskPanel({
   className,
+  onClose,
   onAddTask,
   opened,
 }: Props) {
@@ -23,6 +25,11 @@ export default function CreateTaskPanel({
     setAdding(false);
     setNewTaskName("");
   };
+
+  const cancelAddingTask = () => {
+    setAdding(false);
+    onClose?.();
+  }
 
   if (!adding) {
     return (
@@ -53,7 +60,7 @@ export default function CreateTaskPanel({
       <Button className="w-12" onClick={addTask}>
         <VscCheck className="text-lg text-primary" />
       </Button>
-      <Button className="w-12" onClick={() => setAdding(false)}>
+      <Button className="w-12" onClick={cancelAddingTask}>
         <VscClose className="text-lg" />
       </Button>
     </div>

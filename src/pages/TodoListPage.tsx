@@ -10,13 +10,13 @@ export default function TodoListPage() {
   };
 
   return (
-    <div className="flex flex-col items-stretch gap-1 overflow-x-visible bg-background">
+    <div className="flex flex-col items-stretch gap-1 overflow-x-auto bg-background">
       {taskManager.getAllParentTasks().map((task) => (
         <Todo key={task.id} task={task} />
       ))}
       <CreateTaskPanel
         onAddTask={onAddSubTask}
-        className="h-12 sticky bottom-0 bg-background"
+        className="h-12 sticky bottom-0 left-0 bg-background"
       />
     </div>
   );

@@ -12,7 +12,7 @@ export default function Modal({ onClose, className,children}: Props) {
   return (
     <div
       onClick={onClose}
-      className={classNames("z-40 fixed inset-0 flex flex-col justify-end items-stretch backdrop-blur-lg bg-background bg-opacity-20 sm:justify-center sm:px-[10vw]", className)}
+      className={classNames("z-50 fixed inset-0 flex flex-col justify-end items-stretch backdrop-blur-lg bg-background bg-opacity-20 sm:justify-center", className ?? "sm:px-[10vw]")}
     >
       <div className="flex items-center justify-end py-2 bg-opacity-0">
         <Button onClick={onClose} className="w-8 h-8">
