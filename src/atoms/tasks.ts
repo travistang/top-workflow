@@ -8,8 +8,8 @@ const getAtomDefaultValue = async () => {
   const pendingTasksByDate = await TaskRepository.find(
     {},
     {
-      sortBy: "modifiedAt",
-      order: SortOrder.DSC,
+      sortBy: "order",
+      order: SortOrder.ASC,
     }
   );
   const tasksMappingById = Object.fromEntries(

@@ -5,7 +5,7 @@ import useTaskManager from "../domain/TaskManager";
 
 export default function TodoListPage() {
   const taskManager = useTaskManager();
-  const onAddSubTask = (taskName: string) => {
+  const onAddTask = (taskName: string) => {
     taskManager.createTask(taskName);
   };
 
@@ -15,7 +15,7 @@ export default function TodoListPage() {
         <Todo key={task.id} task={task} />
       ))}
       <CreateTaskPanel
-        onAddTask={onAddSubTask}
+        onAddTask={onAddTask}
         className="h-12 sticky bottom-0 left-0 bg-background"
       />
     </div>

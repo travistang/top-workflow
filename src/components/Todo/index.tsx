@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TaskDTO, TaskState } from "../../entities/Task";
+import { TaskDTO } from "../../entities/Task";
 import TodoExpandedPanel from "./TodoExpandedPanel";
 import { useRecoilState } from "recoil";
 import { expandedTaskAtom, useExpandTask } from "../../atoms/expandedTask";

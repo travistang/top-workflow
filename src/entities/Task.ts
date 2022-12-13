@@ -15,6 +15,7 @@ export interface TaskDTO {
   modifiedAt: number;
   state: TaskState;
   dueDate?: number;
+  order?: number;
   history: {
     state: TaskState;
     date: number;

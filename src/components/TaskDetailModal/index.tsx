@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
-import { VscClose, VscRemove, VscSave } from "react-icons/vsc";
+import { VscRemove, VscSave } from "react-icons/vsc";
 import { useRecoilState } from "recoil";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
 import useTaskManager from "../../domain/TaskManager";

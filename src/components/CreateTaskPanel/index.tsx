@@ -47,8 +47,15 @@ export default function CreateTaskPanel({
       </div>
     );
   }
+
+  const handleKeyDown = (key: React.KeyboardEvent) => {
+    if (key.key.toLowerCase() === 'enter') {
+      addTask();
+    }
+  }
   return (
     <div
+      onKeyDown={handleKeyDown}
       className={classNames(
         "flex items-center gap-2 p-2 bg-opacity-10",
         className

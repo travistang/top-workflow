@@ -18,14 +18,6 @@ export default function useTaskManager() {
     return allTasks.filter((maybeSubTask) => task.id === maybeSubTask.parentId);
   };
 
-  const getTasksUnderTask = (task: TaskDTO) => {
-    const directSubTasks = getAllSubTasks(task);
-    return [
-      ...directSubTasks,
-      ...directSubTasks.flatMap((subTask) => getAllSubTasks(subTask)),
-    ];
-  };
-
   const upsert = async (...newTasks: TaskDTO[]) => {
     const newTasksList = Object.fromEntries(
       newTasks.map((task) => [task.id, task])
@@ -47,6 +39,5 @@ export default function useTaskManager() {
     getAllParentTasks,
     update,
     getAllSubTasks,
-    getTasksUnderTask,
   };
 }
