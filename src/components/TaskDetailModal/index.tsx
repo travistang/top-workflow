@@ -60,6 +60,14 @@ export default function TaskDetailModal() {
             setTaskPlaceholder({ ...taskPlaceHolder, state: newState })
           }
         />
+        <TextInput
+          textarea
+          label="Description"
+          className="col-span-full"
+          inputClassName="h-24"
+          value={taskPlaceHolder.description}
+          onChange={updatePlaceHolder('description')}
+        />
         <DateInput
           label="Due date"
           className="col-span-3 bg-opacity-0"
