@@ -26,16 +26,12 @@ export default function Todo({ task, className, depth = 1 }: Props) {
     forceExpand();
   };
   const expanded = expandedTodoIds.includes(task.id);
-  const shouldShowStateColor = task.state !== TaskState.Pending;
-  const backgroundColorByState = shouldShowStateColor
-    ? TaskStateColorMapping[task.state].background
-    : undefined;
   return (
     <div
       data-component="todo"
       onClick={(e) => e.stopPropagation()}
       className={classNames(
-        "rounded-lg px-2 flex flex-col items-stretch min-w-[50vw]",
+        "px-2 flex flex-col items-stretch min-w-[50vw] my-1",
         className
       )}
     >
@@ -47,7 +43,7 @@ export default function Todo({ task, className, depth = 1 }: Props) {
         isSubTask={depth > 1}
         className={classNames(
           "rounded-lg sticky left-0 h-8 min-w-[100%] bg-opacity-70",
-          backgroundColorByState,
+          TaskStateColorMapping[task.state].background,
 
         )}
       />
@@ -55,6 +51,7 @@ export default function Todo({ task, className, depth = 1 }: Props) {
       {creatingSubTask && (
         <CreateTaskPanel
           opened
+          inputClassName="flex-1"
           onAddTask={onAddNewTask}
           onClose={() => setCreatingSubTask(false)} />
       )}

@@ -19,13 +19,14 @@ export default function TodoExpandedPanel({
     <div
       data-component="todo-expanded-panel"
       className={classNames(
-        "w-full rounded-lg flex flex-col items-stretch ml-6",
+        "w-full flex flex-col items-stretch ml-4 my-2",
+        "border-l-2 border-text border-opacity-40",
         className
       )}
     >
       {taskManager.getAllSubTasks(task).map((subTask) => (
         <div
-          className="flex flex-row flex-shrink-0 p-2"
+          className="flex flex-row flex-shrink-0 px-2"
           key={subTask.id}
         >
           <Todo

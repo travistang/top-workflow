@@ -28,6 +28,11 @@ export default function TodoItem({
   const [actionModalOpened, setActionModalOpened] = useState(false);
   const hasSubTask = useRecoilValue(subTaskAtom(task.id)).length > 0;
   const stateIcon = task.state === TaskState.Pending ? null : TaskStateColorMapping[task.state].icon;
+
+  const requestCreateSubTask = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onRequestCreateSubTask?.();
+  }
   return (
     <div
       onClick={onToggleExpand}
@@ -45,7 +50,7 @@ export default function TodoItem({
         {task.dueDate && <DueDateText dueDate={task.dueDate} />}
       </div>
       <VscKebabVertical onClick={() => setActionModalOpened(true)} />
-      <VscAdd onClick={onRequestCreateSubTask} />
+      <VscAdd onClick={requestCreateSubTask} />
       {actionModalOpened && (
         <TodoActionModal
           onRequestCreateSubTask={onRequestCreateSubTask}

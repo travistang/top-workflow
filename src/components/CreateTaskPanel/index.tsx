@@ -6,12 +6,14 @@ import TextInput from "../Input/TextInput";
 
 type Props = {
   className?: string;
+  inputClassName?: string;
   onAddTask: (taskName: string) => void;
   opened?: boolean;
   onClose?: () => void;
 };
 export default function CreateTaskPanel({
   className,
+  inputClassName,
   onClose,
   onAddTask,
   opened,
@@ -55,6 +57,7 @@ export default function CreateTaskPanel({
       <TextInput
         value={newTaskName}
         onChange={setNewTaskName}
+        className={inputClassName}
         placeholder="Something describing your new task..."
       />
       <Button className="w-12" onClick={addTask}>
