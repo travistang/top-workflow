@@ -19,7 +19,7 @@ export const TaskStateColorMapping: Record<TaskState, ColorConfig> = {
     text: "text-text",
   },
   [TaskState.Blocked]: {
-    background: "bg-accent",
+    background: "bg-accent bg-opacity-70",
     icon: <VscStopCircle />,
     text: "text-accent",
   },
@@ -29,7 +29,7 @@ export const TaskStateColorMapping: Record<TaskState, ColorConfig> = {
     text: "text-secondary",
   },
   [TaskState.Completed]: {
-    background: "bg-primary",
+    background: "bg-primary bg-opacity-70",
     icon: <VscCheck />,
     text: "text-primary",
   },

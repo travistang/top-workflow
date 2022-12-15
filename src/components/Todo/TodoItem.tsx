@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import classNames from "classnames";
 import { TaskDTO, TaskState } from "../../entities/Task";
 import DueDateText from "./DueDateText";
-import TodoActionModal from "./TodoActionModal";
 import { VscAdd, VscKebabVertical } from "react-icons/vsc";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { subTaskAtom } from "../../atoms/tasks";
 import ExpandIcon from "./ExpandIcon";
 import { TaskStateColorMapping } from "../../domain/TaskState";
+import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
 
 type Props = {
   task: TaskDTO;
@@ -16,6 +16,7 @@ type Props = {
   onRequestCreateSubTask?: () => void;
   expanded: boolean;
   onToggleExpand: () => void;
+  children?: React.ReactNode;
 };
 export default function TodoItem({
   task,
@@ -24,10 +25,16 @@ export default function TodoItem({
   expanded,
   onToggleExpand,
   className,
+  children,
 }: Props) {
-  const [actionModalOpened, setActionModalOpened] = useState(false);
+  const setEditActionDetails = useSetRecoilState(taskDetailModalAtom);
   const hasSubTask = useRecoilValue(subTaskAtom(task.id)).length > 0;
   const stateIcon = task.state === TaskState.Pending ? null : TaskStateColorMapping[task.state].icon;
+
+  const toggleExpand = () => {
+    if (!hasSubTask) return;
+    onToggleExpand();
+  }
 
   const requestCreateSubTask = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -35,11 +42,10 @@ export default function TodoItem({
   }
   return (
     <div
-      onClick={onToggleExpand}
+      onClick={toggleExpand}
       className={classNames(
         "px-2 flex items-center gap-2",
         hasSubTask && "cursor-pointer",
-        actionModalOpened && "z-50",
         className ?? ""
       )}
     >
@@ -49,15 +55,9 @@ export default function TodoItem({
         <span className={classNames("bg-opacity-0", isSubTask && 'text-sm')}>{task.name}</span>
         {task.dueDate && <DueDateText dueDate={task.dueDate} />}
       </div>
-      <VscKebabVertical onClick={() => setActionModalOpened(true)} />
+      <VscKebabVertical onClick={() => setEditActionDetails(task)} />
       <VscAdd onClick={requestCreateSubTask} />
-      {actionModalOpened && (
-        <TodoActionModal
-          onRequestCreateSubTask={onRequestCreateSubTask}
-          onClose={() => setActionModalOpened(false)}
-          task={task}
-        />
-      )}
+      {children}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { VscAdd, VscClose, VscCheck } from "react-icons/vsc";
 import classNames from "classnames";
 import Button from "../Input/Button";
@@ -18,8 +18,15 @@ export default function CreateTaskPanel({
   onAddTask,
   opened,
 }: Props) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [adding, setAdding] = useState(opened ?? false);
   const [newTaskName, setNewTaskName] = useState("");
+
+  useEffect(() => {
+    if (adding) {
+      inputRef.current?.focus();
+    }
+  }, [adding]);
 
   const addTask = () => {
     if (!newTaskName) return;
@@ -28,7 +35,7 @@ export default function CreateTaskPanel({
     setNewTaskName("");
   };
 
-  const cancelAddingTask = () => {
+  const cancel = () => {
     setAdding(false);
     onClose?.();
   }
@@ -52,7 +59,8 @@ export default function CreateTaskPanel({
     if (key.key.toLowerCase() === 'enter') {
       addTask();
     }
-  }
+  };
+
   return (
     <div
       onKeyDown={handleKeyDown}
@@ -62,6 +70,7 @@ export default function CreateTaskPanel({
       )}
     >
       <TextInput
+        inputRef={inputRef}
         value={newTaskName}
         onChange={setNewTaskName}
         className={inputClassName}
@@ -70,7 +79,7 @@ export default function CreateTaskPanel({
       <Button className="w-12" onClick={addTask}>
         <VscCheck className="text-lg text-primary" />
       </Button>
-      <Button className="w-12" onClick={cancelAddingTask}>
+      <Button className="w-12" onClick={cancel}>
         <VscClose className="text-lg" />
       </Button>
     </div>

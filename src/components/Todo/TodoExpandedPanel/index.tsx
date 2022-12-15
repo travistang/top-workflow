@@ -1,3 +1,4 @@
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import classNames from "classnames";
 import React from "react";
 import Todo from "..";
@@ -15,6 +16,8 @@ export default function TodoExpandedPanel({
   className,
 }: Props) {
   const taskManager = useTaskManager();
+  const subTasks = taskManager.getAllSubTasks(task).sort((a, b) => (a.order ?? -1) - (b.order ?? -1));
+
   return (
     <div
       data-component="todo-expanded-panel"
@@ -24,7 +27,7 @@ export default function TodoExpandedPanel({
         className
       )}
     >
-      {taskManager.getAllSubTasks(task).map((subTask) => (
+      {subTasks.map((subTask) => (
         <div
           className="flex flex-row flex-shrink-0 px-2"
           key={subTask.id}

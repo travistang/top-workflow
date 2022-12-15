@@ -42,7 +42,7 @@ export default function TodoActionModal({ onRequestCreateSubTask, onClose, task 
     <Modal onClose={onClose} className="sm:px-[20vw]">
       <div
         onClick={(e) => e.stopPropagation()}
-        className="rounded-t-lg sm:rounded-lg p-4 grid grid-cols-4 gap-2 bg-text bg-opacity-5"
+        className="rounded-t-lg sm:rounded-lg p-4 grid grid-cols-4 gap-2 bg-text bg-opacity-20"
       >
         <h4 className="col-span-full flex items-center gap-1 mb-4">
           <VscKebabVertical /> Choose an action

@@ -2,6 +2,15 @@ import classNames from "classnames";
 import React from "react";
 import Label from "./Label";
 
+type InputProps = {
+  textarea?: false,
+  inputRef?: React.MutableRefObject<HTMLInputElement | null>;
+}
+type TextAreaProps = {
+  textarea: true,
+  inputRef?: React.MutableRefObject<HTMLTextAreaElement | null>;
+}
+
 type Props = {
   value: string;
   label?: string;
@@ -10,8 +19,9 @@ type Props = {
   textarea?: boolean;
   inputClassName?: string;
   placeholder?: string;
-};
+} & (InputProps | TextAreaProps);
 export default function TextInput({
+  inputRef,
   value,
   label,
   onChange,
@@ -30,13 +40,15 @@ export default function TextInput({
       <Label text={label} />
       {textarea ? (
         <textarea
+          ref={inputRef}
           placeholder={placeholder}
           className={finalInputClassName}
           value={value}
           onChange={e => onChange(e.target.value)}
         />
       ) : (
-        <input
+          <input
+            ref={inputRef}
           placeholder={placeholder}
           className={finalInputClassName}
           value={value}

@@ -3,6 +3,7 @@ import { capitalize } from "../../utils/strings";
 import { TaskStateColorMapping } from "../../domain/TaskState";
 import { TaskState } from "../../entities/Task";
 import Dropdown from "./Dropdown";
+import classNames from "classnames";
 
 type Props = {
   value: TaskState;
@@ -21,13 +22,14 @@ export default function TaskStateDropdown({
     ([taskState, options]) => ({
       value: taskState as TaskState,
       icon: options.icon,
-      className: options.text,
+      className: 'text-text',
       label: capitalize(taskState as string),
     })
   );
   return (
     <Dropdown
       className={className}
+      inputClassName={TaskStateColorMapping[value].background}
       value={value}
       label={label}
       options={options}

@@ -66,8 +66,11 @@ class TaskRepository extends Dexie {
     }
   }
 
-  remove(id: string) {
-    return this.tasks.delete(id);
+  async remove(id: string) {
+    const subTasksOfTask = await this.find({ parentId: {equals: id} });
+    const removingIds = [...subTasksOfTask.map((subTask) => subTask.id), id];
+    await this.tasks.bulkDelete(removingIds);
+    return removingIds;
   }
 
   private buildFilter(taskFilter: TaskFilter, sorting: SortConfig<TaskDTO>) {
@@ -75,8 +78,6 @@ class TaskRepository extends Dexie {
     if (sorting.limit) {
       filter = filter.limit(sorting.limit);
     }
-
-    console.log({ sorting });
 
     if (sorting.sortBy) {
       return sorting.order === SortOrder.ASC

@@ -37,7 +37,7 @@ export default function Dropdown<T>({
     >
       <div
         className={classNames(
-          "relative bg-opacity-0 flex flex-col gap-2 items-stretch",
+          "relative bg-opacity-0 flex flex-col gap-2 items-stretch cursor-pointer",
           className
         )}
       >

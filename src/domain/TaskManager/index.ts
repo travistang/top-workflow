@@ -14,8 +14,18 @@ export default function useTaskManager() {
     });
   };
 
+  const get = (id: string) => {
+    return tasks[id];
+  }
+
   const getAllSubTasks = (task: TaskDTO) => {
     return allTasks.filter((maybeSubTask) => task.id === maybeSubTask.parentId);
+  };
+
+  const getAllSiblings = (task: TaskDTO) => {
+    return allTasks.filter(
+      (maybeSiblings) => task.parentId === maybeSiblings.parentId
+    );
   };
 
   const upsert = async (...newTasks: TaskDTO[]) => {
@@ -32,12 +42,21 @@ export default function useTaskManager() {
     setTasks({ ...tasks, [id]: updatedTask });
   };
 
+  const remove = async (id: string) => {
+    const removedIds = await TaskRepository.remove(id);
+    const remainingEntries = Object.entries(tasks).filter(([id]) => !removedIds.includes(id));
+    setTasks(Object.fromEntries(remainingEntries));
+  }
+
   return {
+    get,
     tasks,
     createTask,
     upsert,
     getAllParentTasks,
     update,
     getAllSubTasks,
+    getAllSiblings,
+    remove,
   };
 }

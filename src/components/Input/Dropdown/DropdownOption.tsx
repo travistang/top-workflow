@@ -22,7 +22,7 @@ export default function DropdownOption<T>({
     <div
       onClick={clickHandler}
       className={classNames(
-        "flex items-center gap-2 bg-opacity-0",
+        "cursor-pointer flex items-center gap-2 bg-opacity-0 hover:bg-text hover:bg-opacity-5",
         className,
         selected && "bg-text bg-opacity-20 -mx-2 px-2"
       )}
