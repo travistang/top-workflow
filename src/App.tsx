@@ -9,7 +9,7 @@ import TaskDetailModal from "./components/TaskDetailModal";
 function App() {
   return (
     <RecoilRoot>
-      <Router>
+      <Router basename="/top-workflow">
         <div className="bg-background fixed inset-0 p-2 flex flex-col gap-2 items-stretch">
           <Header />
           <div className="flex-1 overflow-y-auto flex-shrink-0">
