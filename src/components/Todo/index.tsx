@@ -5,7 +5,7 @@ import { VscMove } from "react-icons/vsc";
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from "@dnd-kit/sortable";
 
-import { TaskDTO } from "../../entities/Task";
+import { TaskDTO, TaskState } from "../../entities/Task";
 import TodoExpandedPanel from "./TodoExpandedPanel";
 import { expandedTaskAtom, useExpandTask } from "../../atoms/expandedTask";
 import TodoItem from "./TodoItem";
@@ -21,10 +21,12 @@ type Props = {
 export default function Todo({ task, className, depth = 1 }: Props) {
   const { attributes, listeners, setNodeRef, transform } = useSortable({ id: task.id });
   const [expandedTodoIds] = useRecoilState(expandedTaskAtom);
-  const toggleExpand = useExpandTask(task.id);
   const [creatingSubTask, setCreatingSubTask] = useState(false);
   const forceExpand = useExpandTask(task.id, true);
   const taskManager = useTaskManager();
+  const derivedState = taskManager.getDerivedState(task);
+  const shouldHighlightWithDerviedState = derivedState && [TaskState.Completed, TaskState.Blocked].includes(derivedState);
+
   const onAddNewTask = async (subTaskName: string) => {
     setCreatingSubTask(false);
     await taskManager.createTask(subTaskName, task.id);
@@ -36,7 +38,7 @@ export default function Todo({ task, className, depth = 1 }: Props) {
       data-component="todo"
       onClick={(e) => e.stopPropagation()}
       className={classNames(
-        "px-2 flex flex-col items-stretch min-w-[50vw] my-1 sticky top-0",
+        "flex flex-col items-stretch min-w-[100vw] sm:min-w-[50vw] my-1 sticky left-0",
         className
       )}
       ref={setNodeRef}
@@ -44,14 +46,13 @@ export default function Todo({ task, className, depth = 1 }: Props) {
     >
       <TodoItem
         expanded={expanded}
-        onToggleExpand={toggleExpand}
         onRequestCreateSubTask={() => setCreatingSubTask(true)}
         task={task}
         isSubTask={depth > 1}
         className={classNames(
-          "rounded-lg sticky top-0 left-0 h-8 min-w-[50vw]",
+          "whitespace-nowrap rounded-lg h-8 ",
           TaskStateColorMapping[task.state].background,
-
+          shouldHighlightWithDerviedState && classNames(TaskStateColorMapping[derivedState].background, 'rounded-lg bg-opacity-30'),
         )}
       >
         <VscMove

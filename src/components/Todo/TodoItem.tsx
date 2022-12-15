@@ -8,6 +8,7 @@ import { subTaskAtom } from "../../atoms/tasks";
 import ExpandIcon from "./ExpandIcon";
 import { TaskStateColorMapping } from "../../domain/TaskState";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
+import { useExpandTask } from "../../atoms/expandedTask";
 
 type Props = {
   task: TaskDTO;
@@ -15,7 +16,6 @@ type Props = {
   isSubTask?: boolean;
   onRequestCreateSubTask?: () => void;
   expanded: boolean;
-  onToggleExpand: () => void;
   children?: React.ReactNode;
 };
 export default function TodoItem({
@@ -23,13 +23,13 @@ export default function TodoItem({
   onRequestCreateSubTask,
   isSubTask,
   expanded,
-  onToggleExpand,
   className,
   children,
 }: Props) {
   const setEditActionDetails = useSetRecoilState(taskDetailModalAtom);
   const hasSubTask = useRecoilValue(subTaskAtom(task.id)).length > 0;
   const stateIcon = task.state === TaskState.Pending ? null : TaskStateColorMapping[task.state].icon;
+  const onToggleExpand = useExpandTask(task.id);
 
   const toggleExpand = () => {
     if (!hasSubTask) return;

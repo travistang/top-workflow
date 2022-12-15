@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import taskAtom from "../../atoms/tasks";
-import { TaskDTO } from "../../entities/Task";
+import { TaskDTO, TaskState } from "../../entities/Task";
 import TaskRepository from "../../repositories/TaskRepository";
 
 export default function useTaskManager() {
@@ -36,6 +36,19 @@ export default function useTaskManager() {
     setTasks({ ...tasks, ...newTasksList });
   };
 
+  const getDerivedState = (task: TaskDTO): TaskState | null => {
+    const subTasks = getAllSubTasks(task);
+    if (task.state !== TaskState.Pending || subTasks.length === 0) return null;
+    if (subTasks.some(task => task.state === TaskState.Blocked)) {
+      return TaskState.Blocked;
+    }
+
+    if (subTasks.every(task => [TaskState.Completed, TaskState.Ignored].includes(task.state))) {
+      return TaskState.Completed;
+    };
+    return null;
+  }
+
   const getAllParentTasks = () => allTasks.filter((task) => !task.parentId);
   const update = async (id: string, updatedTask: TaskDTO) => {
     await TaskRepository.update(id, updatedTask);
@@ -58,5 +71,6 @@ export default function useTaskManager() {
     getAllSubTasks,
     getAllSiblings,
     remove,
+    getDerivedState,
   };
 }
