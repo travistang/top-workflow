@@ -13,8 +13,8 @@ export default function TaskList() {
   const taskManager = useTaskManager();
   const tasks = taskManager.getAllParentTasks();
   const { setNodeRef, isOver } = useDroppable({ id: PARENT_DROP_ID });
-  const onAddTask = (taskName: string) => {
-    taskManager.createTask(taskName);
+  const onAddTask = (name: string) => {
+    taskManager.createTask({ name });
   };
 
   return (

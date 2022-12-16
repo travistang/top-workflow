@@ -1,12 +1,11 @@
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import classNames from "classnames";
 import React from "react";
 import Todo from "..";
+import { CachedTask } from "../../../atoms/tasks";
 import useTaskManager from "../../../domain/TaskManager";
-import { TaskDTO } from "../../../entities/Task";
 
 type Props = {
-  task: TaskDTO;
+  task: CachedTask;
   depth?: number;
   className?: string;
 };

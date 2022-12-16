@@ -1,17 +1,17 @@
 import React from "react";
 import classNames from "classnames";
-import { TaskDTO, TaskState } from "../../entities/Task";
+import { TaskState } from "../../entities/Task";
 import DueDateText from "./DueDateText";
 import { VscAdd, VscKebabVertical } from "react-icons/vsc";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { subTaskAtom } from "../../atoms/tasks";
+import { CachedTask, subTaskAtom } from "../../atoms/tasks";
 import ExpandIcon from "./ExpandIcon";
 import { TaskStateColorMapping } from "../../domain/TaskState";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
 import { useExpandTask } from "../../atoms/expandedTask";
 
 type Props = {
-  task: TaskDTO;
+  task: CachedTask;
   className?: string;
   isSubTask?: boolean;
   onRequestCreateSubTask?: () => void;

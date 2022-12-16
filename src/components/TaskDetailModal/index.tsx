@@ -1,8 +1,9 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
-import { VscRemove, VscSave, VscTrash } from "react-icons/vsc";
+import {  VscSave, VscTrash } from "react-icons/vsc";
 import { useRecoilState } from "recoil";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
+import { CachedTask } from "../../atoms/tasks";
 import useTaskManager from "../../domain/TaskManager";
 import { TaskDTO } from "../../entities/Task";
 import { Modifier } from "../../utils/object";
@@ -14,7 +15,7 @@ import Modal from "../Modal";
 
 export default function TaskDetailModal() {
   const [taskDetail, setTaskDetail] = useRecoilState(taskDetailModalAtom);
-  const [taskPlaceHolder, setTaskPlaceholder] = useState<TaskDTO | null>(null);
+  const [taskPlaceHolder, setTaskPlaceholder] = useState<CachedTask | null>(null);
   const taskManager = useTaskManager();
 
   useEffect(() => {

@@ -5,16 +5,17 @@ import { VscMove } from "react-icons/vsc";
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from "@dnd-kit/sortable";
 
-import { TaskDTO, TaskState } from "../../entities/Task";
+import { TaskState } from "../../entities/Task";
 import TodoExpandedPanel from "./TodoExpandedPanel";
 import { expandedTaskAtom, useExpandTask } from "../../atoms/expandedTask";
 import TodoItem from "./TodoItem";
 import CreateTaskPanel from "../CreateTaskPanel";
 import useTaskManager from "../../domain/TaskManager";
 import { TaskStateColorMapping } from "../../domain/TaskState";
+import { CachedTask } from "../../atoms/tasks";
 
 type Props = {
-  task: TaskDTO;
+  task: CachedTask;
   depth?: number;
   className?: string;
 };
@@ -28,7 +29,7 @@ export default function Todo({ task, className, depth = 1 }: Props) {
   const shouldHighlightWithDerviedState = derivedState && [TaskState.Completed, TaskState.Blocked].includes(derivedState);
 
   const onAddNewTask = async (subTaskName: string) => {
-    await taskManager.createTask(subTaskName, task.id);
+    await taskManager.createTask({name: subTaskName, parentId: task.id});
     forceExpand();
   };
   const expanded = expandedTodoIds.includes(task.id);

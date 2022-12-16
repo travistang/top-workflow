@@ -3,7 +3,16 @@ import { SortOrder } from "../domain/Filter/SortConfig";
 import { TaskDTO } from "../entities/Task";
 import TaskRepository from "../repositories/TaskRepository";
 
-export type TaskAtomValue = Record<string, TaskDTO>;
+export type CachedTask = TaskDTO & {
+  focused: boolean;
+}
+
+export const mapToCachedTask = (task: TaskDTO): CachedTask => ({
+  ...task,
+  focused: false,
+});
+
+export type TaskAtomValue = Record<string, CachedTask>;
 const getAtomDefaultValue = async () => {
   const pendingTasksByDate = await TaskRepository.find(
     {},
@@ -13,7 +22,7 @@ const getAtomDefaultValue = async () => {
     }
   );
   const tasksMappingById = Object.fromEntries(
-    pendingTasksByDate.map((task) => [task.id, task])
+    pendingTasksByDate.map((task) => [task.id, mapToCachedTask(task)])
   );
   return tasksMappingById;
 };

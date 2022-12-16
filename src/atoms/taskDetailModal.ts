@@ -1,7 +1,7 @@
 import { atom } from "recoil";
-import { TaskDTO } from "../entities/Task";
+import { CachedTask } from "./tasks";
 
-export const taskDetailModalAtom = atom<TaskDTO | null>({
+export const taskDetailModalAtom = atom<CachedTask | null>({
   key: "task-detail-modal",
   default: null,
 });
