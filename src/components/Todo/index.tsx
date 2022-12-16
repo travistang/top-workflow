@@ -38,7 +38,7 @@ export default function Todo({ task, className, depth = 1 }: Props) {
       data-component="todo"
       onClick={(e) => e.stopPropagation()}
       className={classNames(
-        "flex flex-col items-stretch min-w-[100vw] sm:min-w-[50vw] my-1 sticky left-0",
+        "flex flex-col items-stretch min-w-[100vw] sm:min-w-[50vw] my-1 sticky left-0 rounded-lg",
         className
       )}
       ref={setNodeRef}
