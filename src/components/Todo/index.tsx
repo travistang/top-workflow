@@ -28,7 +28,6 @@ export default function Todo({ task, className, depth = 1 }: Props) {
   const shouldHighlightWithDerviedState = derivedState && [TaskState.Completed, TaskState.Blocked].includes(derivedState);
 
   const onAddNewTask = async (subTaskName: string) => {
-    setCreatingSubTask(false);
     await taskManager.createTask(subTaskName, task.id);
     forceExpand();
   };
@@ -63,7 +62,6 @@ export default function Todo({ task, className, depth = 1 }: Props) {
       {expanded && <TodoExpandedPanel depth={depth} task={task} />}
       {creatingSubTask && (
         <CreateTaskPanel
-          opened
           inputClassName="flex-1"
           onAddTask={onAddNewTask}
           onClose={() => setCreatingSubTask(false)} />
