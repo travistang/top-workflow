@@ -3,7 +3,6 @@ import {
   VscCheck,
   VscRefresh,
   VscStopCircle,
-  VscSyncIgnored,
 } from "react-icons/vsc";
 import { TaskState } from "../entities/Task";
 
@@ -22,11 +21,6 @@ export const TaskStateColorMapping: Record<TaskState, ColorConfig> = {
     background: "bg-accent bg-opacity-70",
     icon: <VscStopCircle />,
     text: "text-accent",
-  },
-  [TaskState.Ignored]: {
-    background: "bg-secondary",
-    icon: <VscSyncIgnored />,
-    text: "text-secondary",
   },
   [TaskState.Completed]: {
     background: "bg-primary bg-opacity-70",

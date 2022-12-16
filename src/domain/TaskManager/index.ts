@@ -43,7 +43,7 @@ export default function useTaskManager() {
       return TaskState.Blocked;
     }
 
-    if (subTasks.every(task => [TaskState.Completed, TaskState.Ignored].includes(task.state))) {
+    if (subTasks.every(task => task.state === TaskState.Completed)) {
       return TaskState.Completed;
     };
     return null;

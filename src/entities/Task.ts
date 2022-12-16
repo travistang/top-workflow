@@ -1,7 +1,6 @@
 export enum TaskState {
   Pending = "pending",
   Completed = "completed",
-  Ignored = "ignored",
   Blocked = "blocked",
 }
 
