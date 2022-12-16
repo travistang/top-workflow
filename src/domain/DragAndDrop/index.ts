@@ -32,4 +32,4 @@ export const useDragEndHandler = () => {
 
 export const getSortedTaskItems = <T extends { order?: number }>(
   items: T[]
-) => items.sort((a, b) => (a.order ?? -1) - (b.order ?? -1));
+) => [...items].sort((a, b) => (a.order ?? -1) - (b.order ?? -1));

@@ -46,7 +46,6 @@ export default function useTaskManager() {
     return null;
   }
 
-  const getAllParentTasks = () => allTasks.filter((task) => !task.parentId);
   const update = async (id: string, updatedTask: CachedTask) => {
     await TaskRepository.update(id, updatedTask);
     setTasks({ ...tasks, [id]: updatedTask });
@@ -63,7 +62,6 @@ export default function useTaskManager() {
     tasks,
     createTask: createTask(props),
     upsert,
-    getAllParentTasks,
     update,
     getAllSubTasks,
     getAllSiblings,

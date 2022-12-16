@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
-import {  VscSave, VscTrash } from "react-icons/vsc";
+import {  VscEye, VscSave, VscTrash } from "react-icons/vsc";
 import { useRecoilState } from "recoil";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
-import { CachedTask } from "../../atoms/tasks";
+import { CachedTask, focusedTaskSelector } from "../../atoms/tasks";
 import useTaskManager from "../../domain/TaskManager";
 import { TaskDTO } from "../../entities/Task";
 import { Modifier } from "../../utils/object";
@@ -15,8 +15,10 @@ import Modal from "../Modal";
 
 export default function TaskDetailModal() {
   const [taskDetail, setTaskDetail] = useRecoilState(taskDetailModalAtom);
+  const [focusedTask, setFocusedTask] = useRecoilState(focusedTaskSelector);
   const [taskPlaceHolder, setTaskPlaceholder] = useState<CachedTask | null>(null);
   const taskManager = useTaskManager();
+  const isFocused = focusedTask && focusedTask.id === taskDetail?.id;
 
   useEffect(() => {
     setTaskPlaceholder(taskDetail);
@@ -55,13 +57,22 @@ export default function TaskDetailModal() {
       >
         <div className="grid grid-cols-6 col-span-full items-center">
           <h3 className="col-span-2 font-bold mb-4">Task details</h3>
-          <TaskStateDropdown
-            className="col-end-7 col-span-2 bg-opacity-0"
-            value={taskPlaceHolder.state}
-            onChange={(newState) =>
-              setTaskPlaceholder({ ...taskPlaceHolder, state: newState })
-            }
-          />
+          <div className="col-span-4 flex items-center justify-end gap-2">
+            <Button className={classNames(
+              "flex items-center gap-2 px-2 bg-secondary h-8 rounded-lg",
+              !isFocused ? "bg-secondary" : "bg-text bg-opacity-20",
+            )} onClick={() => setFocusedTask(isFocused ? null : taskDetail)}>
+              <VscEye />
+              {isFocused ? "Remove focus on task" : "Focus on task"}
+            </Button>
+            <TaskStateDropdown
+              className="flex-shrink-0 bg-opacity-0"
+              value={taskPlaceHolder.state}
+              onChange={(newState) =>
+                setTaskPlaceholder({ ...taskPlaceHolder, state: newState })
+              }
+            />
+          </div>
         </div>
         <TextInput
           label="Task name"
