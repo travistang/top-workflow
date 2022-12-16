@@ -1,5 +1,4 @@
 import { DragEndEvent } from "@dnd-kit/core";
-import TaskRepository from "../../repositories/TaskRepository";
 import { inRange } from "../../utils/number";
 import useTaskManager from "../TaskManager";
 
