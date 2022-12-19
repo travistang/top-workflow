@@ -1,7 +1,7 @@
 import { CachedTask } from "../../../atoms/tasks";
 import { TaskManagerHandler } from "../types";
 
-const getStemTasks: TaskManagerHandler<CachedTask, CachedTask[]> = (props) => (task) => {
+const getParentTaskChain: TaskManagerHandler<CachedTask, CachedTask[]> = (props) => (task) => {
   const getParent = (task: CachedTask) => task.parentId ? props.tasks[task.parentId] : null;
 
   const findParentRecursively = (task: CachedTask, parentChain: CachedTask[]): CachedTask[] => {
@@ -15,4 +15,4 @@ const getStemTasks: TaskManagerHandler<CachedTask, CachedTask[]> = (props) => (t
   return findParentRecursively(task, []);
 };
 
-export default getStemTasks;
+export default getParentTaskChain;
