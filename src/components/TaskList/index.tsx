@@ -7,7 +7,7 @@ import { focusedTaskSelector, taskWithParentIdSelector } from '../../atoms/tasks
 import { getSortedTaskItems, PARENT_DROP_ID } from '../../domain/DragAndDrop';
 import useTaskManager from '../../domain/TaskManager';
 import CreateTaskPanel from '../CreateTaskPanel';
-import Todo from '../Todo';
+import Task from '../Task';
 
 
 export default function TaskList() {
@@ -29,7 +29,7 @@ export default function TaskList() {
           isOver ? 'bg-secondary bg-opacity-20' : 'bg-background',
         )}>
           {displayingTasks.map((task) => (
-            <Todo key={task.id} task={task} />
+            <Task key={task.id} task={task} />
           ))}
         </div>
       </SortableContext>

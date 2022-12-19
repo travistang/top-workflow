@@ -3,7 +3,7 @@ import { RecoilRoot } from "recoil";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import TodoListPage from "./pages/TodoListPage";
+import TaskListPage from "./pages/TaskListPage";
 import TaskDetailModal from "./components/TaskDetailModal";
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
           <Header />
           <div className="flex-1 overflow-y-auto flex-shrink-0 flex flex-col">
             <Routes>
-              <Route path="/" element={<TodoListPage />} />
+              <Route path="/" element={<TaskListPage />} />
               <Route path="/flow" element={<>Flow</>} />
             </Routes>
           </div>

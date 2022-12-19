@@ -18,7 +18,7 @@ type Props = {
   expanded: boolean;
   children?: React.ReactNode;
 };
-export default function TodoItem({
+export default function TaskItem({
   task,
   onRequestCreateSubTask,
   isSubTask,
@@ -44,7 +44,7 @@ export default function TodoItem({
     <div
       onClick={toggleExpand}
       className={classNames(
-        "px-2 flex items-center gap-2",
+        "px-2 py-3 flex items-center gap-2 whitespace-wrap",
         hasSubTask && "cursor-pointer",
         className ?? ""
       )}

@@ -7,7 +7,7 @@ import {
 import { useDragEndHandler } from "../domain/DragAndDrop";
 import TaskList from "../components/TaskList";
 
-export default function TodoListPage() {
+export default function TaskListPage() {
   const onDragEnd = useDragEndHandler();
   return (
     <DndContext modifiers={[restrictToVerticalAxis, restrictToWindowEdges]} onDragEnd={onDragEnd}>

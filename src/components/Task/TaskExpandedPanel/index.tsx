@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React from "react";
-import Todo from "..";
+import Task from "..";
 import { CachedTask } from "../../../atoms/tasks";
 import useTaskManager from "../../../domain/TaskManager";
 
@@ -9,7 +9,7 @@ type Props = {
   depth?: number;
   className?: string;
 };
-export default function TodoExpandedPanel({
+export default function TaskExpandedPanel({
   depth = 0,
   task,
   className,
@@ -31,7 +31,7 @@ export default function TodoExpandedPanel({
           className="flex flex-row flex-shrink-0 px-2"
           key={subTask.id}
         >
-          <Todo
+          <Task
             depth={depth + 1}
             task={subTask}
             key={subTask.id}

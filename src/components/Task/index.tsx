@@ -6,9 +6,9 @@ import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from "@dnd-kit/sortable";
 
 import { TaskState } from "../../entities/Task";
-import TodoExpandedPanel from "./TodoExpandedPanel";
+import TaskExpandedPanel from "./TaskExpandedPanel";
 import { expandedTaskAtom, useExpandTask } from "../../atoms/expandedTask";
-import TodoItem from "./TodoItem";
+import TaskItem from "./TaskItem";
 import CreateTaskPanel from "../CreateTaskPanel";
 import useTaskManager from "../../domain/TaskManager";
 import { TaskStateColorMapping } from "../../domain/TaskState";
@@ -44,13 +44,13 @@ export default function Todo({ task, className, depth = 1 }: Props) {
       ref={setNodeRef}
       style={{ transform: CSS.Translate.toString(transform) }}
     >
-      <TodoItem
+      <TaskItem
         expanded={expanded}
         onRequestCreateSubTask={() => setCreatingSubTask(true)}
         task={task}
         isSubTask={depth > 1}
         className={classNames(
-          "whitespace-nowrap rounded-lg h-8",
+          "whitespace-nowrap rounded-lg",
           TaskStateColorMapping[task.state].background,
           shouldHighlightWithDerviedState && classNames(TaskStateColorMapping[derivedState].background, 'rounded-lg bg-opacity-30'),
         )}
@@ -59,8 +59,8 @@ export default function Todo({ task, className, depth = 1 }: Props) {
           {...listeners}
           {...attributes}
         />
-      </TodoItem>
-      {expanded && <TodoExpandedPanel depth={depth} task={task} />}
+      </TaskItem>
+      {expanded && <TaskExpandedPanel depth={depth} task={task} />}
       {creatingSubTask && (
         <CreateTaskPanel
           inputClassName="flex-1"
