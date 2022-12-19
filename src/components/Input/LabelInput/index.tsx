@@ -45,7 +45,7 @@ export default function LabelInput({ inputClassName, label, placeholder, onChang
           inputClassName
         )}
         onChange={e => setInputText(e.target.value)} />
-      <div data-id='label-input-wrapper' className="flex flex-row gap-2 flex-wrap">
+      <div data-component='label-input-wrapper' className="flex flex-row gap-2 flex-wrap">
         {labels.map((label) => (
           <div
             key={label}
