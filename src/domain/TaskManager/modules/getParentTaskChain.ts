@@ -5,11 +5,11 @@ const getStemTasks: TaskManagerHandler<CachedTask, CachedTask[]> = (props) => (t
   const getParent = (task: CachedTask) => task.parentId ? props.tasks[task.parentId] : null;
 
   const findParentRecursively = (task: CachedTask, parentChain: CachedTask[]): CachedTask[] => {
-    const isRoot = !task.parentId;
-    if (isRoot) return [task, ...parentChain];
+    const isRoot = !task.parentId && parentChain.length === 0;
+    if (isRoot) return [];
     const parent = getParent(task);
     if (!parent) return parentChain;
-    return findParentRecursively(parent, [task, ...parentChain]);
+    return findParentRecursively(parent, [parent, ...parentChain]);
   };
 
   return findParentRecursively(task, []);
