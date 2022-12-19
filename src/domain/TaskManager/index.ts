@@ -1,8 +1,11 @@
 import { useRecoilState } from "recoil";
 import taskAtom, { CachedTask, mapToCachedTask } from "../../atoms/tasks";
-import { TaskState } from "../../entities/Task";
 import TaskRepository from "../../repositories/TaskRepository";
 import createTask from "./modules/createTask";
+import getAllSubTasks from "./modules/getAllSubTasks";
+import getDerivedState from "./modules/getDerivedState";
+import getParentTaskChain from "./modules/getParentTaskChain";
+import getStemTasks from "./modules/getStemTasks";
 import toggleFocus from "./modules/toggleHighlight";
 import { TaskManagerHandlerProps } from "./types";
 
@@ -14,10 +17,6 @@ export default function useTaskManager() {
   const get = (id: string) => {
     return tasks[id];
   }
-
-  const getAllSubTasks = (task: CachedTask) => {
-    return allTasks.filter((maybeSubTask) => task.id === maybeSubTask.parentId);
-  };
 
   const getAllSiblings = (task: CachedTask) => {
     return allTasks.filter(
@@ -32,19 +31,6 @@ export default function useTaskManager() {
     await Promise.all(newTasks.map((task) => TaskRepository.upsert(task)));
     setTasks({ ...tasks, ...newTasksList });
   };
-
-  const getDerivedState = (task: CachedTask): TaskState | null => {
-    const subTasks = getAllSubTasks(task);
-    if (task.state !== TaskState.Pending || subTasks.length === 0) return null;
-    if (subTasks.some(task => task.state === TaskState.Blocked)) {
-      return TaskState.Blocked;
-    }
-
-    if (subTasks.every(task => task.state === TaskState.Completed)) {
-      return TaskState.Completed;
-    };
-    return null;
-  }
 
   const update = async (id: string, updatedTask: CachedTask) => {
     await TaskRepository.update(id, updatedTask);
@@ -61,12 +47,14 @@ export default function useTaskManager() {
     get,
     tasks,
     createTask: createTask(props),
+    getStemTasks: getStemTasks(props),
+    getParentTaskChain: getParentTaskChain(props),
     upsert,
     update,
-    getAllSubTasks,
+    getAllSubTasks: getAllSubTasks(props),
     getAllSiblings,
     remove,
-    getDerivedState,
+    getDerivedState: getDerivedState(props),
     toggleFocus: toggleFocus(allTasks),
   };
 }

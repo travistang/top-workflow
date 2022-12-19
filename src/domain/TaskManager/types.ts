@@ -5,4 +5,4 @@ export type TaskManagerHandlerProps = {
   tasks: Record<string, CachedTask>;
   setTasks: (newMapping: Record<string, CachedTask>) => void;
 }
-export type TaskManagerHandler<T> = (props: TaskManagerHandlerProps) => (moduleProps: T) => Promise<void>;
+export type TaskManagerHandler<T, U = Promise<void>> = (props: TaskManagerHandlerProps) => (moduleProps: T) => U;

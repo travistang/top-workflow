@@ -19,7 +19,7 @@ type Props = {
   depth?: number;
   className?: string;
 };
-export default function Todo({ task, className, depth = 1 }: Props) {
+export default function Task({ task, className, depth = 1 }: Props) {
   const { attributes, listeners, setNodeRef, transform } = useSortable({ id: task.id });
   const [expandedTodoIds] = useRecoilState(expandedTaskAtom);
   const [creatingSubTask, setCreatingSubTask] = useState(false);
