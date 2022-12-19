@@ -50,7 +50,7 @@ export default function Todo({ task, className, depth = 1 }: Props) {
         task={task}
         isSubTask={depth > 1}
         className={classNames(
-          "whitespace-nowrap rounded-lg h-8 ",
+          "whitespace-nowrap rounded-lg h-8",
           TaskStateColorMapping[task.state].background,
           shouldHighlightWithDerviedState && classNames(TaskStateColorMapping[derivedState].background, 'rounded-lg bg-opacity-30'),
         )}

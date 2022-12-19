@@ -9,6 +9,7 @@ import { TaskDTO } from "../../entities/Task";
 import { Modifier } from "../../utils/object";
 import Button from "../Input/Button";
 import DateInput from "../Input/Dropdown/DateInput";
+import LabelInput from "../Input/LabelInput";
 import TaskStateDropdown from "../Input/TaskStateDropdown";
 import TextInput from "../Input/TextInput";
 import Modal from "../Modal";
@@ -93,6 +94,13 @@ export default function TaskDetailModal() {
           inputClassName="h-24"
           value={taskPlaceHolder.description}
           onChange={updatePlaceHolder('description')}
+        />
+        <LabelInput
+          label="Labels"
+          className="col-span-full"
+          placeholder="Give a label that helps finding this task..."
+          labels={taskPlaceHolder.labels}
+          onChange={updatePlaceHolder('labels')}
         />
 
         <Button

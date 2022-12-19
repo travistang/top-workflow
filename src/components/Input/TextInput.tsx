@@ -47,8 +47,8 @@ export default function TextInput({
           onChange={e => onChange(e.target.value)}
         />
       ) : (
-          <input
-            ref={inputRef}
+        <input
+          ref={inputRef}
           placeholder={placeholder}
           className={finalInputClassName}
           value={value}
