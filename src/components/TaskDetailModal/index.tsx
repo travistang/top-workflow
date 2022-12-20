@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
-import {  VscEye, VscSave, VscTrash } from "react-icons/vsc";
+import {  VscEye, VscEyeClosed, VscPinned, VscPinnedDirty, VscSave, VscTrash } from "react-icons/vsc";
 import { useRecoilState } from "recoil";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
 import { CachedTask, focusedTaskSelector } from "../../atoms/tasks";
@@ -39,7 +39,9 @@ export default function TaskDetailModal() {
   }
 
   const onCommitChanges = () => {
-    taskManager.upsert(taskPlaceHolder);
+    const isTaskFocused = focusedTask?.id === taskPlaceHolder.id;
+    const updatedPayload: CachedTask = { ...taskPlaceHolder, focused: isTaskFocused };
+    taskManager.upsert(updatedPayload);
     onClose();
   };
 
@@ -58,13 +60,18 @@ export default function TaskDetailModal() {
       >
         <div className="grid grid-cols-6 col-span-full items-center">
           <h3 className="col-span-2 font-bold mb-4">Task details</h3>
-          <div className="col-span-4 flex items-center justify-end gap-2">
+          <div className="col-span-4 flex justify-end gap-2 flex-wrap flex-row">
             <Button className={classNames(
-              "flex items-center gap-2 px-2 bg-secondary h-8 rounded-lg",
+              "flex items-center gap-2 px-2 bg-secondary h-8 rounded-lg flex-shrink-0",
+              taskPlaceHolder.flagged ? 'bg-danger text-danger bg-opacity-30' : 'bg-text',
+            )} onClick={() => updatePlaceHolder('flagged')(!taskPlaceHolder.flagged)}>
+              {taskPlaceHolder.flagged ? <VscPinnedDirty /> : <VscPinned /> }
+            </Button>
+            <Button className={classNames(
+              "flex items-center gap-2 px-2 bg-secondary h-8 rounded-lg flex-shrink-0",
               !isFocused ? "bg-secondary" : "bg-text bg-opacity-20",
             )} onClick={() => setFocusedTask(isFocused ? null : taskDetail)}>
-              <VscEye />
-              {isFocused ? "Remove focus on task" : "Focus on task"}
+              {!isFocused ? <VscEyeClosed /> : <VscEye /> }
             </Button>
             <TaskStateDropdown
               className="flex-shrink-0 bg-opacity-0"
