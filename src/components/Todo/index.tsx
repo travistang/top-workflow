@@ -28,7 +28,7 @@ export default function Todo({ className, todo, onClick, onToggleCompleted = () 
       "border-b border-text border-opacity-50 last:border-none",
       className
     )}>
-      <Checkbox checked={todo.state === TaskState.Completed} onCheck={onToggleCompleted} />
+      <Checkbox className="sticky left-0 bg-text-alt" checked={todo.state === TaskState.Completed} onCheck={onToggleCompleted} />
       <div className="flex flex-col">
         {parentTaskChainString && (
           <span className="text-xs text-primary text-opacity-70 overflow-hidden whitespace-nowrap text-ellipsis">

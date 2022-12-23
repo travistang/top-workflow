@@ -22,7 +22,7 @@ export default function TaskList() {
   const displayingTasks = focusedTask ? [focusedTask] : parentTasks;
 
   return (
-    <div data-id="TaskList" onClick={() => setCreatingTask(true)} className="flex flex-col items-stretch flex-1">
+    <div data-id="TaskList" onClick={() => setCreatingTask(!creatingTask)} className="flex flex-col items-stretch flex-1">
       <SortableContext items={getSortedTaskItems(displayingTasks)}>
         <div ref={setNodeRef} className={classNames(
           "rounded-lg flex flex-col items-stretch",

@@ -41,6 +41,7 @@ export default function CreateTaskPanel({
 
   return (
     <div
+      onClick={e => e.stopPropagation()}
       onKeyDown={handleKeyDown}
       className={classNames(
         "flex items-center gap-2 p-2 bg-opacity-10",
@@ -51,7 +52,7 @@ export default function CreateTaskPanel({
         inputRef={inputRef}
         value={newTaskName}
         onChange={setNewTaskName}
-        className={inputClassName}
+        className={classNames("flex-1", inputClassName)}
         placeholder="Something describing your new task..."
       />
       {canCreateTask && (
