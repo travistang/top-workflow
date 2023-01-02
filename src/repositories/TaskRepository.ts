@@ -1,4 +1,5 @@
 import Dexie, { Table } from "dexie";
+import { Changes } from "../domain/Changes";
 import {
   getDefaultSortConfig,
   SortConfig,
@@ -99,6 +100,17 @@ class TaskRepository extends Dexie {
     const taskDtos = await this.buildFilter(taskFilter, sorting);
     return taskDtos;
   }
+
+  async applyChanges(changes: Changes) {
+    await this.tasks.bulkAdd(changes.created);
+    await this.tasks.bulkDelete(changes.removed.map(removedTask => removedTask.id));
+    await Promise.all(
+      changes.updated.map(
+        ({ current }) => this.tasks.update(current.id, current)
+      )
+    );
+  }
+
 }
 
 export default new TaskRepository();

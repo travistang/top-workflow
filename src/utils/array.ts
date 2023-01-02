@@ -17,3 +17,11 @@ export const addWithoutRepeat = <T>(arr: T[], element: T) => {
   if (isElementInArray) return arr;
   return [...arr, element];
 };
+
+export const isEqual = <T>(a: T[], b: T[], compareFn: (a: T, b: T) => boolean = (a, b) => a === b) => {
+  return (
+    a.length === b.length &&
+    a.every((elA) => b.find((elB) => compareFn(elA, elB))) &&
+    b.every((elB) => b.find((elA) => compareFn(elB, elA)))
+  );
+};

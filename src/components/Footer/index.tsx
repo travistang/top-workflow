@@ -1,7 +1,12 @@
 import classNames from 'classnames';
 import React from 'react';
 import { IconType } from 'react-icons';
-import { VscCheckAll, VscGitMerge, VscListTree } from 'react-icons/vsc';
+import {
+  VscCheckAll,
+  VscGitMerge,
+  VscListTree,
+  VscSettingsGear
+} from 'react-icons/vsc';
 import FooterItem from './FooterItem';
 
 type FooterItemProps = {
@@ -14,7 +19,8 @@ const footerItems: FooterItemProps[] = [
   { path: '/', icon: VscListTree },
   { path: '/todo', icon: VscCheckAll, className: 'sm:hidden' },
   { path: '/flow', icon: VscGitMerge },
-]
+  { path: '/settings', icon: VscSettingsGear },
+];
 export default function Footer() {
   return (
     <div className={classNames(

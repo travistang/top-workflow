@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import TaskListPage from "./pages/TaskListPage";
 import TodoListPage from "./pages/TodoListPage";
 import TaskDetailModal from "./components/TaskDetailModal";
+import SettingsPage from "./pages/SettingsPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/" element={<TaskListPage />} />
               <Route path="/todo" element={<TodoListPage />} />
               <Route path="/flow" element={<>Flow</>} />
+              <Route path="/settings" element={<SettingsPage />} />
             </Routes>
           </div>
           <TaskDetailModal />
