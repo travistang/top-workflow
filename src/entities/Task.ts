@@ -4,6 +4,10 @@ export enum TaskState {
   Blocked = "blocked",
 }
 
+export type TaskStateMachineState = {
+  stateMachineId: string;
+  stateId: string;
+}
 export interface TaskDTO {
   id: string;
   name: string;
@@ -20,4 +24,5 @@ export interface TaskDTO {
     state: TaskState;
     date: number;
   }[];
+  stateMachine?: TaskStateMachineState;
 }

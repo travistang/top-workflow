@@ -5,7 +5,8 @@ import {
   VscCheckAll,
   VscGitMerge,
   VscListTree,
-  VscSettingsGear
+  VscSettingsGear,
+  VscSymbolClass
 } from 'react-icons/vsc';
 import FooterItem from './FooterItem';
 
@@ -19,6 +20,7 @@ const footerItems: FooterItemProps[] = [
   { path: '/', icon: VscListTree },
   { path: '/todo', icon: VscCheckAll, className: 'sm:hidden' },
   { path: '/flow', icon: VscGitMerge },
+  { path: '/stateMachine', icon: VscSymbolClass },
   { path: '/settings', icon: VscSettingsGear },
 ];
 export default function Footer() {
