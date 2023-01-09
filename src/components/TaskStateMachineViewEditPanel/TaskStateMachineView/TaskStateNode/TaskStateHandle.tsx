@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
 import { VscFoldDown } from 'react-icons/vsc';
 import { Connection, Handle, Position } from 'reactflow';
 
@@ -7,6 +7,7 @@ type Props = {
   type: 'source' | 'target';
   position: Position;
   className?: string;
+  editing?: boolean;
   id: string;
 };
 
@@ -17,9 +18,10 @@ const isValidConnection = (connection: Connection) => {
   if (targetHandle?.endsWith('source')) return false;
   return true;
 }
-export default function CustomHandle({ id, className, type, position }: Props) {
+export default function CustomHandle({ id, editing, className, type, position }: Props) {
   return (
     <Handle
+      isConnectable={editing}
       type={type}
       id={`${id}-${type}`}
       isValidConnection={isValidConnection}

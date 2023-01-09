@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Connection,
   NodeChange,
@@ -12,20 +12,20 @@ import {
 } from "../../../domain/TaskStateMachine";
 import { TaskStateMachine } from "../../../entities/TaskStateMachine";
 import useFlowClickPosition from "../../../hooks/useFlowClickPosition";
+import { taskStateMachineViewContext } from "./TaskStateMachineViewContext";
 
-type FlowViewCallbackProps<T extends TaskStateMachine | null = TaskStateMachine | null> = [
-  draftStateMachineState: [T, React.Dispatch<T>],
+type FlowViewCallbackProps = [
   viewWrapper: React.MutableRefObject<HTMLDivElement | null>,
   editable: boolean
 ];
 
 const updateNodePosition = (
-  props: FlowViewCallbackProps<TaskStateMachine>,
+  draftStateMachine: TaskStateMachine,
+  updateStateMachine: ((stateMachine: TaskStateMachine) => void) | undefined,
   change: NodePositionChange
 ) => {
-  const [[draftStateMachine, updateStateMachine]] = props;
   if (!change.position) return;
-  updateStateMachine(
+  updateStateMachine?.(
     updateTaskState(draftStateMachine, change.id, {
       position: change.position,
     })
@@ -33,19 +33,21 @@ const updateNodePosition = (
 };
 
 export default function useFlowViewCallback(...props: FlowViewCallbackProps) {
-  const [[draftStateMachine, updateStateMachine], viewWrapper, editable] = props;
+  const { stateMachine: draftStateMachine, updateStateMachine } = useContext(
+    taskStateMachineViewContext
+  ) ?? {};
+  const [viewWrapper, editable] = props;
   const clickHandler = useFlowClickPosition(viewWrapper);
 
   if (!editable || !draftStateMachine || !viewWrapper.current) return {};
 
   const createState = (position: XYPosition) => {
-    console.log("creating state");
     const newStateMachine = addTaskState(
       draftStateMachine,
       "New State",
       position
     );
-    updateStateMachine(newStateMachine);
+    updateStateMachine?.(newStateMachine);
   };
 
   const createConnection = (connection: Connection) => {
@@ -55,20 +57,16 @@ export default function useFlowViewCallback(...props: FlowViewCallbackProps) {
       connection.source,
       connection.target
     );
-    updateStateMachine(newStateMachine);
+    updateStateMachine?.(newStateMachine);
   };
 
   const updateNode = (changes: NodeChange[]) => {
     changes.forEach((change) => {
       switch (change.type) {
         case "position":
-          return updateNodePosition(
-            props as FlowViewCallbackProps<TaskStateMachine>,
-            change
-          );
+          return updateNodePosition(draftStateMachine, updateStateMachine, change);
         case "add":
-          console.log("Create state");
-          return createState(change.item.position)
+          return createState(change.item.position);
       }
     });
   };

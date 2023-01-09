@@ -13,6 +13,7 @@ import TaskStateHandle from './TaskStateHandle';
 import TextInput from '../../../Input/TextInput';
 
 type Props = {
+  connectable?: boolean;
   data: TaskState & {
     editable: boolean;
   };
@@ -20,7 +21,7 @@ type Props = {
 
 const StateCycle = Object.keys(TaskStateColorMapping) as BaseTaskState[];
 
-export default function TaskStateNode({ data }: Props) {
+export default function TaskStateNode({ data, connectable }: Props) {
   const { stateMachine, updateStateMachine } = useContext(taskStateMachineViewContext) ?? {};
   const { updateNode, deleteNode } = useTaskStateMutation(data.id);
   if (!stateMachine || !updateStateMachine) return null;
@@ -38,14 +39,8 @@ export default function TaskStateNode({ data }: Props) {
   const onChangeName = (name: string) => updateNode({ name });
   return (
     <>
-      {
-        editable && (
-          <>
-            <TaskStateHandle id={data.id} type="source" position={Position.Bottom} />
-            <TaskStateHandle id={data.id} type="target" position={Position.Top} />
-          </>
-        )
-      }
+      <TaskStateHandle editing={connectable} id={data.id} type="source" position={Position.Bottom} />
+      <TaskStateHandle editing={connectable} id={data.id} type="target" position={Position.Top} />
       <div className={classNames(
         "grid grid-cols-6 rounded-lg bg-opacity-50 p-2 text-sm gap-y-2",
         background
@@ -55,12 +50,16 @@ export default function TaskStateNode({ data }: Props) {
             editable ? <TextInput inputClassName='w-full' value={data.name} onChange={onChangeName} /> : data.name
           }
         </span>
-        <Button onClick={onDeleteNode} className="col-start-1">
-          <VscTrash />
-        </Button>
-        <Button onClick={onSwitchImpliedState} className="col-start-6">
-          {icon}
-        </Button>
+        {editable && (
+          <>
+            <Button onClick={onDeleteNode} className="col-start-1">
+              <VscTrash />
+            </Button>
+            <Button onClick={onSwitchImpliedState} className="col-start-6">
+              {icon}
+            </Button>
+          </>
+        )}
       </div>
     </>
   );

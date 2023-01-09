@@ -27,7 +27,7 @@ class TaskStateMachineRepository extends Dexie {
     });
   }
 
-  async edit(id: string, stateMachinesConfig: Omit<TaskState, "id">) {
+  async edit(id: string, stateMachinesConfig: Omit<TaskStateMachine, "id">) {
     return this.stateMachines.update(id, stateMachinesConfig);
   }
 

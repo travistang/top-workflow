@@ -15,7 +15,9 @@ export default function Button({ children, className, onClick }: Props) {
   return (
     <button
       onClick={guardedOnClick}
-      className={classNames("flex items-center justify-center", className)}
+      className={classNames(
+        "flex items-center justify-center rounded-lg",
+        className)}
     >
       {children}
     </button>

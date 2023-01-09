@@ -1,17 +1,13 @@
-import { useLiveQuery } from 'dexie-react-hooks';
-import React, { useEffect, useRef, useState } from 'react';
-import ReactFlow, { Background, ConnectionLineType, Controls } from 'reactflow';
+import React, { useContext, useRef } from 'react';
+import ReactFlow, { Background, ConnectionLineType, ConnectionMode, Controls } from 'reactflow';
 
-import TaskStateMachineRepository from '../../../repositories/TaskStateMachineRepository';
-import { TaskStateMachine } from '../../../entities/TaskStateMachine';
-import 'reactflow/dist/style.css';
 import { getTaskStateMachineView } from '../../../domain/TaskStateMachine';
 import TaskStateNode from './TaskStateNode';
 import useFlowViewCallback from './useFlowViewCallback';
-import TaskStateMachineViewContextProvider from './TaskStateMachineViewContext';
+import { taskStateMachineViewContext } from './TaskStateMachineViewContext';
+import 'reactflow/dist/style.css';
 
 type Props = {
-  stateMachineId: string | null;
   editable?: boolean;
 };
 
@@ -19,47 +15,37 @@ const nodeTypes = {
   taskState: TaskStateNode,
 };
 
-export default function TaskStateMachineView({ stateMachineId, editable }: Props) {
+export default function TaskStateMachineView({ editable }: Props) {
+  const { stateMachine, updateStateMachine } = useContext(taskStateMachineViewContext) ?? {};
   const viewWrapper = useRef<HTMLDivElement | null>(null);
-  const stateMachine = useLiveQuery(() => stateMachineId ? TaskStateMachineRepository.get(stateMachineId) : undefined, [stateMachineId]);
-  const [draftStateMachine, setDraftStateMachine] = useState<TaskStateMachine | null>(null);
   const { onClick, onConnect, onNodesChange } = useFlowViewCallback(
-    [draftStateMachine, setDraftStateMachine],
-    viewWrapper,
-    !!editable
+    viewWrapper, !!editable
   );
-  useEffect(() => {
-    if (stateMachine) {
-      setDraftStateMachine(stateMachine);
-    }
-  }, [stateMachine]);
 
-  if (!draftStateMachine) return null;
+  if (!stateMachine || !updateStateMachine) return null;
 
   const { nodes, edges } = getTaskStateMachineView(
-    draftStateMachine,
+    stateMachine,
     editable
   );
 
+  console.log({ nodes, edges, stateMachine });
+
   return (
-    <TaskStateMachineViewContextProvider
-      stateMachine={draftStateMachine}
-      updateStateMachine={setDraftStateMachine}>
-      <div ref={viewWrapper} className="flex flex-1 items-center justify-center">
-        <ReactFlow
-          snapToGrid
-          fitView
-          connectionLineType={ConnectionLineType.SmoothStep}
-          onNodesChange={onNodesChange}
-          onClick={onClick}
-          nodes={nodes}
-          onConnect={onConnect}
-          edges={edges}
-          nodeTypes={nodeTypes}>
-          <Controls />
-          <Background />
-        </ReactFlow>
-      </div>
-    </TaskStateMachineViewContextProvider>
+    <div ref={viewWrapper} className="flex flex-1 items-center justify-center">
+      <ReactFlow
+        snapToGrid
+        fitView
+        connectionLineType={ConnectionLineType.SmoothStep}
+        onNodesChange={onNodesChange}
+        onClick={onClick}
+        nodes={nodes}
+        onConnect={onConnect}
+        edges={edges}
+        nodeTypes={nodeTypes}>
+        <Controls />
+        <Background />
+      </ReactFlow>
+    </div>
   );
 }

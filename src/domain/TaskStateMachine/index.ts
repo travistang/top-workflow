@@ -89,6 +89,7 @@ export const getTaskStateMachineView = (
       editable,
     },
     position: state.position,
+    connectable: editable,
     type: 'taskState',
   }));
 
