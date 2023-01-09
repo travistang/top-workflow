@@ -3,7 +3,6 @@ import { capitalize } from "../../utils/strings";
 import { TaskStateColorMapping } from "../../domain/TaskState";
 import { TaskState } from "../../entities/Task";
 import Dropdown from "./Dropdown";
-import classNames from "classnames";
 
 type Props = {
   value: TaskState;

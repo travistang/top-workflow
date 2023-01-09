@@ -24,7 +24,7 @@ export default function TaskStateMachineList({
 
   if (!stateMachines) return null;
   return (
-    <div onClick={() => setIsCreatingStateMachine(true)} className="min-h-1/2 rounded-lg flex flex-col p-2">
+    <div onClick={() => setIsCreatingStateMachine(true)} className="min-h-1/2 rounded-lg flex flex-col py-4 bg-text-secondary max-w-1/3">
       {!stateMachines.length && (<span className="text-sm flex items-center justify-center">
         No task state machines defined
       </span>)}

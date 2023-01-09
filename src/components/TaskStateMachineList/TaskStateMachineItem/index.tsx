@@ -27,8 +27,8 @@ export default function TaskStateMachineItem({
       key={stateMachine.id}
       onClick={onClick}
       className={classNames(
-        "px-2 h-8 flex items-center",
-        selected && "bg-text-secondary"
+        "px-4 overflow-x-hidden text-ellipsis h-12 flex items-center cursor-pointer",
+        selected && "bg-primary bg-opacity-50"
       )}>
       {stateMachine.name}
       {selected && (
