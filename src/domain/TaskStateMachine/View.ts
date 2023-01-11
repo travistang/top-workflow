@@ -1,4 +1,5 @@
 import { ConnectionLineType, Edge, MarkerType, Node } from "reactflow";
+import { getReachableNextState } from ".";
 import {
   TaskState,
   TaskStateMachine,
@@ -10,9 +11,18 @@ export type ComputeTaskStateMachineViewProps = {
   editable?: boolean;
   updateStateMachine?: (newStateMachine: TaskStateMachine) => void;
   currentStateId?: string;
+  selectedStateId?: string;
   selectableStates?: string[];
   onSelectState?: (stateId: string) => void;
 };
+
+export enum TaskStateNodeHighlight {
+  None,
+  CurrentState,
+  SelectedCurrentState,
+  ViableNextState,
+  SelectedViableNextState,
+}
 
 export type TaskStateNodeData = TaskState & {
   editable?: boolean;
@@ -20,6 +30,35 @@ export type TaskStateNodeData = TaskState & {
   updateStateMachine?: (newMachine: TaskStateMachine) => void;
   onSelect?: () => void;
   currentStateId?: string;
+  highlightType: TaskStateNodeHighlight;
+};
+
+const computeNodeHighlight = (
+  stateMachine: TaskStateMachine,
+  state: TaskState,
+  currentStateId?: string,
+  selectedStateId?: string
+): TaskStateNodeHighlight => {
+  if (!currentStateId) return TaskStateNodeHighlight.ViableNextState;
+  const isStateCurrent = state.id === currentStateId;
+  const isStateSelected = state.id === selectedStateId;
+  if (isStateCurrent)
+    return isStateSelected
+      ? TaskStateNodeHighlight.SelectedCurrentState
+      : TaskStateNodeHighlight.CurrentState;
+
+  const reachableNextStates = getReachableNextState(
+    stateMachine,
+    currentStateId
+  );
+  const isStateReachable = reachableNextStates.find(
+    (nextState) => nextState.id === state.id
+  );
+  if (!isStateReachable) return TaskStateNodeHighlight.None;
+
+  return isStateSelected
+    ? TaskStateNodeHighlight.SelectedViableNextState
+    : TaskStateNodeHighlight.ViableNextState;
 };
 
 const mapStateToNode = (
@@ -33,6 +72,7 @@ const mapStateToNode = (
     stateMachine,
     updateStateMachine,
     currentStateId,
+    selectedStateId,
   } = props;
   const canStateBeSelected =
     !selectableStates || selectableStates?.includes(state.id);
@@ -49,8 +89,13 @@ const mapStateToNode = (
       updateStateMachine,
       onSelect,
       currentStateId,
+      highlightType: computeNodeHighlight(
+        stateMachine,
+        state,
+        currentStateId,
+        selectedStateId
+      ),
     },
-    selected: state.id === currentStateId,
     position: state.position,
     connectable: editable,
     type: "taskState",
