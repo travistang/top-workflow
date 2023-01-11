@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { VscEdit, VscRemove, VscSave, VscTrash } from 'react-icons/vsc';
-import TaskStateMachineRepository from '../../../repositories/TaskStateMachineRepository';
-import Button from '../../Input/Button';
-import TextInput from '../../Input/TextInput';
-import { taskStateMachineViewContext } from '../TaskStateMachineView/TaskStateMachineViewContext';
+import React, { useContext } from "react";
+import { VscEdit, VscRemove, VscSave, VscTrash } from "react-icons/vsc";
+import TaskStateMachineRepository from "../../../repositories/TaskStateMachineRepository";
+import Button, { ButtonTheme } from "../../Input/Button";
+import TextInput from "../../Input/TextInput";
+import { taskStateMachineViewContext } from "../TaskStateMachineView/TaskStateMachineViewContext";
 
 type Props = {
   editing: boolean;
@@ -19,7 +19,8 @@ export default function TaskStateMachineOverview({
   onSave,
   onDelete,
 }: Props) {
-  const { stateMachine, updateStateMachine } = useContext(taskStateMachineViewContext) ?? {};
+  const { stateMachine, updateStateMachine } =
+    useContext(taskStateMachineViewContext) ?? {};
   if (!stateMachine || !updateStateMachine) return null;
 
   const onChangeName = (name: string) => {
@@ -35,25 +36,32 @@ export default function TaskStateMachineOverview({
     <div className="rounded-lg grid grid-cols-6 gap-2">
       <TextInput
         className="col-span-3"
-        label='State machine name'
+        label="State machine name"
         value={stateMachine.name}
         onChange={onChangeName}
       />
       <Button
         className="bg-text-secondary"
-        onClick={editing ? onCancelEdit : editStateMachine}>
+        onClick={editing ? onCancelEdit : editStateMachine}
+      >
         {editing ? <VscRemove /> : <VscEdit />}
-        {editing ? 'Cancel' : 'Edit'}
+        {editing ? "Cancel" : "Edit"}
       </Button>
       {editing && (
-        <Button onClick={saveTaskMachine} className='bg-primary bg-opacity-50 text-primary'>
+        <Button
+          theme={ButtonTheme.Success}
+          onClick={saveTaskMachine}
+          className="bg-opacity-50"
+        >
           <VscSave />
           Save
         </Button>
       )}
       <Button
-        className="text-danger bg-danger bg-opacity-50"
-        onClick={onDelete}>
+        theme={ButtonTheme.Danger}
+        className="bg-opacity-50"
+        onClick={onDelete}
+      >
         <VscTrash />
         Delete
       </Button>

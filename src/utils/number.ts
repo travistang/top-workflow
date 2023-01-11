@@ -4,7 +4,11 @@ export enum InRangeMode {
   IncludeLowerUpperBound,
   ExcludeAll,
 }
-export const inRange = (range: [number, number], value: number, mode = InRangeMode.ExcludeAll) => {
+export const inRange = (
+  range: [number, number],
+  value: number,
+  mode = InRangeMode.ExcludeAll
+) => {
   const [low, high] = range;
   switch (mode) {
     case InRangeMode.ExcludeAll:
@@ -16,4 +20,11 @@ export const inRange = (range: [number, number], value: number, mode = InRangeMo
     case InRangeMode.IncludeLowerUpperBound:
       return low <= value && value <= high;
   }
-}
+};
+
+export const sum = (numbers: number[]) =>
+  numbers.reduce((total, n) => total + n, 0);
+
+export const average = (numbers: number[]) => {
+  return numbers.length === 0 ? 0 : sum(numbers) / numbers.length;
+};

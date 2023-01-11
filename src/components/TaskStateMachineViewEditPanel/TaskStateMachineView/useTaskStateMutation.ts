@@ -1,11 +1,13 @@
-import { useContext } from "react";
-import { TaskState } from "../../../entities/TaskStateMachine";
-import { taskStateMachineViewContext } from "./TaskStateMachineViewContext";
+import {
+  TaskState,
+  TaskStateMachine,
+} from "../../../entities/TaskStateMachine";
 
-export default function useTaskStateMutation(stateId: string) {
-  const { stateMachine, updateStateMachine } =
-    useContext(taskStateMachineViewContext) ?? {};
-
+export default function useTaskStateMutation(
+  stateId: string,
+  stateMachine: TaskStateMachine,
+  updateStateMachine?: (newStateMachine: TaskStateMachine) => void
+) {
   const updateNode = (newData: Partial<Omit<TaskState, "id">>) => {
     if (!stateMachine || !updateStateMachine) return;
     const states = stateMachine?.states.map((state) =>

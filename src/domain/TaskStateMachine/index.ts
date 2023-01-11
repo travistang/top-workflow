@@ -1,5 +1,4 @@
-import React from "react";
-import { ConnectionLineType, Edge, MarkerType, Node, XYPosition } from "reactflow";
+import { XYPosition } from "reactflow";
 import { TaskState as BaseTaskState } from "../../entities/Task";
 import {
   TaskState,
@@ -7,7 +6,10 @@ import {
   TaskStateTransition,
 } from "../../entities/TaskStateMachine";
 
-export const generateTaskState = (name: string, position: XYPosition): TaskState => {
+export const generateTaskState = (
+  name: string,
+  position: XYPosition
+): TaskState => {
   return {
     id: window.crypto.randomUUID(),
     name,
@@ -28,7 +30,7 @@ export const generateTransition = (
 export const addTaskState = (
   stateMachine: TaskStateMachine,
   newStateName: string,
-  position: XYPosition,
+  position: XYPosition
 ): TaskStateMachine => {
   return {
     ...stateMachine,
@@ -43,9 +45,11 @@ export const updateTaskState = (
 ) => {
   return {
     ...stateMachine,
-    states: stateMachine.states.map(state => state.id === id ? {...state, ...data} : state)
-  }
-}
+    states: stateMachine.states.map((state) =>
+      state.id === id ? { ...state, ...data } : state
+    ),
+  };
+};
 
 export const addTransition = (
   stateMachine: TaskStateMachine,
@@ -75,32 +79,32 @@ export const addTransition = (
   };
 };
 
-export const getTaskStateMachineView = (
+export const getTaskStateById = (stateMachine: TaskStateMachine, id: string) =>
+  stateMachine.states.find((state) => state.id === id);
+
+export const getTransitionsFromState = (
   stateMachine: TaskStateMachine,
-  editable?: boolean,
-): {
-  nodes: Node<TaskState>[];
-  edges: Edge<TaskStateTransition>[];
-} => {
-  const nodes = stateMachine.states.map<Node<TaskState>>((state) => ({
-    id: state.id,
-    data: {
-      ...state,
-      editable,
-    },
-    position: state.position,
-    connectable: editable,
-    type: 'taskState',
-  }));
+  id: string
+) => stateMachine.transitions.filter((transition) => transition.fromId === id);
 
-  const edges = stateMachine.transitions.map<Edge<TaskStateTransition>>((transition) => ({
-    id: transition.id,
-    source: transition.fromId,
-    target: transition.toId,
-    label: transition.name,
-    type: ConnectionLineType.SmoothStep,
-    markerEnd: { type: MarkerType.ArrowClosed }
-  }));
+export const getReachableNextState = (
+  stateMachine: TaskStateMachine,
+  currentStateId: string,
+  includeCurrentState = false
+): TaskState[] => {
+  const currentState = getTaskStateById(stateMachine, currentStateId);
+  if (!currentState) return stateMachine.states;
 
-  return { nodes, edges };
+  const reachableNextStates = getTransitionsFromState(
+    stateMachine,
+    currentStateId
+  ).map((transition) => transition.toId);
+
+  const nonEmptyNextStates = reachableNextStates
+    .map((nextStateId) => getTaskStateById(stateMachine, nextStateId))
+    .filter((result) => !!result) as TaskState[];
+
+  return includeCurrentState
+    ? [...nonEmptyNextStates, currentState]
+    : nonEmptyNextStates;
 };

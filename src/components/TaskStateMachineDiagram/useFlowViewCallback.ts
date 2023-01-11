@@ -9,15 +9,9 @@ import {
   addTaskState,
   addTransition,
   updateTaskState,
-} from "../../../domain/TaskStateMachine";
-import { TaskStateMachine } from "../../../entities/TaskStateMachine";
-import useFlowClickPosition from "../../../hooks/useFlowClickPosition";
-import { taskStateMachineViewContext } from "./TaskStateMachineViewContext";
-
-type FlowViewCallbackProps = [
-  viewWrapper: React.MutableRefObject<HTMLDivElement | null>,
-  editable: boolean
-];
+} from "../../domain/TaskStateMachine";
+import { TaskStateMachine } from "../../entities/TaskStateMachine";
+import useFlowClickPosition from "../../hooks/useFlowClickPosition";
 
 const updateNodePosition = (
   draftStateMachine: TaskStateMachine,
@@ -32,11 +26,12 @@ const updateNodePosition = (
   );
 };
 
-export default function useFlowViewCallback(...props: FlowViewCallbackProps) {
-  const { stateMachine: draftStateMachine, updateStateMachine } = useContext(
-    taskStateMachineViewContext
-  ) ?? {};
-  const [viewWrapper, editable] = props;
+export default function useFlowViewCallback(
+  viewWrapper: React.MutableRefObject<HTMLDivElement | null>,
+  draftStateMachine: TaskStateMachine,
+  updateStateMachine?: (stateMachine: TaskStateMachine) => void,
+  editable?: boolean
+) {
   const clickHandler = useFlowClickPosition(viewWrapper);
 
   if (!editable || !draftStateMachine || !viewWrapper.current) return {};
@@ -64,7 +59,11 @@ export default function useFlowViewCallback(...props: FlowViewCallbackProps) {
     changes.forEach((change) => {
       switch (change.type) {
         case "position":
-          return updateNodePosition(draftStateMachine, updateStateMachine, change);
+          return updateNodePosition(
+            draftStateMachine,
+            updateStateMachine,
+            change
+          );
         case "add":
           return createState(change.item.position);
       }
