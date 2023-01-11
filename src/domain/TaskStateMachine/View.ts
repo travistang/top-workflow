@@ -80,6 +80,14 @@ const mapStateToNode = (
     ? () => onSelectState?.(state.id)
     : undefined;
 
+  const highlightType = editable
+    ? TaskStateNodeHighlight.None
+    : computeNodeHighlight(
+        stateMachine,
+        state,
+        currentStateId,
+        selectedStateId
+      );
   return {
     id: state.id,
     data: {
@@ -89,12 +97,7 @@ const mapStateToNode = (
       updateStateMachine,
       onSelect,
       currentStateId,
-      highlightType: computeNodeHighlight(
-        stateMachine,
-        state,
-        currentStateId,
-        selectedStateId
-      ),
+      highlightType,
     },
     position: state.position,
     connectable: editable,
