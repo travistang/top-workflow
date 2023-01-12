@@ -3,7 +3,7 @@ import ReactFlow, { Background, ConnectionLineType, Controls } from "reactflow";
 import classNames from "classnames";
 
 import { TaskStateMachine } from "../../entities/TaskStateMachine";
-import { getTaskStateMachineView } from "../../domain/TaskStateMachine/View";
+import { getTaskStateMachineView, TaskStateNodeHighlight } from "../../domain/TaskStateMachine/View";
 import useFlowViewCallback from "./useFlowViewCallback";
 import TaskStateNode from "./TaskStateNode";
 
@@ -14,6 +14,7 @@ type Props = {
   onUpdateStateMachine?: (stateMachine: TaskStateMachine) => void;
   currentStateId?: string;
   selectableStates?: string[];
+  highlightedStates?: Record<string, TaskStateNodeHighlight>,
   onSelectState?: (stateId: string) => void;
   className?: string;
   editable?: boolean;
@@ -28,6 +29,7 @@ export default function TaskStateMachineDiagram({
   onUpdateStateMachine,
   currentStateId,
   selectableStates,
+  highlightedStates = { },
   onSelectState,
   editable,
   className,
@@ -47,6 +49,7 @@ export default function TaskStateMachineDiagram({
     updateStateMachine: onUpdateStateMachine,
     onSelectState,
     currentStateId,
+    highlightedStates,
     selectableStates,
   });
 

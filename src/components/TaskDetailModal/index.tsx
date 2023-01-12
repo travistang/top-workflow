@@ -115,7 +115,7 @@ export default function TaskDetailModal() {
         />
         <TaskStateMachinePicker
           updateTaskDetails={updatePlaceHolder("stateMachine")}
-          selectedStateMachine={taskPlaceHolder.stateMachine}
+          state={taskPlaceHolder.stateMachine}
           initialStateMachine={taskDetail?.stateMachine}
         />
         <TextInput

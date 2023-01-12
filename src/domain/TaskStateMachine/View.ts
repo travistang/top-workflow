@@ -13,6 +13,7 @@ export type ComputeTaskStateMachineViewProps = {
   currentStateId?: string;
   selectedStateId?: string;
   selectableStates?: string[];
+  highlightedStates: Record<string, TaskStateNodeHighlight>;
   onSelectState?: (stateId: string) => void;
 };
 
@@ -33,7 +34,7 @@ export type TaskStateNodeData = TaskState & {
   highlightType: TaskStateNodeHighlight;
 };
 
-const computeNodeHighlight = (
+export const computeNodeHighlight = (
   stateMachine: TaskStateMachine,
   state: TaskState,
   currentStateId?: string,
@@ -72,22 +73,13 @@ const mapStateToNode = (
     stateMachine,
     updateStateMachine,
     currentStateId,
-    selectedStateId,
+    highlightedStates,
   } = props;
   const canStateBeSelected =
     !selectableStates || selectableStates?.includes(state.id);
   const onSelect = canStateBeSelected
     ? () => onSelectState?.(state.id)
     : undefined;
-
-  const highlightType = editable
-    ? TaskStateNodeHighlight.None
-    : computeNodeHighlight(
-        stateMachine,
-        state,
-        currentStateId,
-        selectedStateId
-      );
   return {
     id: state.id,
     data: {
@@ -97,7 +89,7 @@ const mapStateToNode = (
       updateStateMachine,
       onSelect,
       currentStateId,
-      highlightType,
+      highlightType: highlightedStates[state.id] ?? TaskStateNodeHighlight.None,
     },
     position: state.position,
     connectable: editable,

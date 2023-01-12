@@ -4,11 +4,11 @@ import { VscTrash } from "react-icons/vsc";
 import { Position } from "reactflow";
 import { TaskStateColorMapping } from "../../../domain/TaskState";
 import { TaskStateNodeData } from "../../../domain/TaskStateMachine/View";
-import { TaskState as BaseTaskState } from "../../../entities/Task";
 
 import Button from "../../Input/Button";
 import TextInput from "../../Input/TextInput";
 import useTaskStateMutation from "../../TaskStateMachineViewEditPanel/TaskStateMachineView/useTaskStateMutation";
+import { StateCycle, StateHighlightStyleMapping } from "./constants";
 import TaskStateHandle from "./TaskStateHandle";
 
 type Props = {
@@ -16,12 +16,9 @@ type Props = {
   data: TaskStateNodeData;
 };
 
-const StateCycle = Object.keys(TaskStateColorMapping) as BaseTaskState[];
-
 export default function TaskStateNode({ data, connectable }: Props) {
-  const { editable, impliedState, onSelect, stateMachine, updateStateMachine } =
+  const { highlightType, editable, impliedState, onSelect, stateMachine, updateStateMachine } =
     data;
-  const selected = data.id === data.currentStateId;
   const { updateNode, deleteNode } = useTaskStateMutation(
     data.id,
     stateMachine,
@@ -58,7 +55,7 @@ export default function TaskStateNode({ data, connectable }: Props) {
         onClick={onSelect}
         className={classNames(
           "grid grid-cols-6 rounded-lg bg-opacity-50 p-2 text-sm gap-y-2",
-          selected && "border-2 border-secondary",
+          StateHighlightStyleMapping[highlightType],
           background
         )}
       >

@@ -34,12 +34,12 @@ export default function TaskStateMachineOverview({
 
   return (
     <div className="rounded-lg grid grid-cols-6 gap-2">
-      <TextInput
+      {!editing ? <div className="col-span-3 h-12">{stateMachine.name}</div> : <TextInput
         className="col-span-3"
         label="State machine name"
         value={stateMachine.name}
         onChange={onChangeName}
-      />
+      />}
       <Button
         className="bg-text-secondary"
         onClick={editing ? onCancelEdit : editStateMachine}
