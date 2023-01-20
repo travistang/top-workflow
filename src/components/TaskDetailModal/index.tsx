@@ -1,11 +1,13 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import {
+  VscListTree,
   VscPinned,
   VscPinnedDirty,
   VscSave,
   VscTrash,
 } from "react-icons/vsc";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
 import { CachedTask } from "../../atoms/tasks";
@@ -30,6 +32,8 @@ export default function TaskDetailModal() {
   );
   const isTaskPlaceholderValid = useTaskValidation(taskPlaceHolder);
   const taskManager = useTaskManager();
+  const navigate = useNavigate();
+
   const isUsingStateMachine = !!taskPlaceHolder?.stateMachine;
   useEffect(() => {
     setTaskPlaceholder(taskDetail);
@@ -83,6 +87,12 @@ export default function TaskDetailModal() {
         <div className="grid grid-cols-6 col-span-full items-center">
           <h3 className="col-span-2 font-bold mb-4">Task details</h3>
           <div className="col-span-4 flex justify-end gap-2 flex-wrap flex-row">
+            <Button
+              onClick={() => navigate(`/graph/${taskPlaceHolder.id}`)}
+              className="bg-text-secondary px-2 gap-2">
+              <VscListTree />
+              Graph view
+            </Button>
             <Button
               theme={taskPlaceHolder.flagged ? ButtonTheme.Danger : undefined}
               className="flex items-center gap-2 px-2 bg-secondary h-8 rounded-lg flex-shrink-0"

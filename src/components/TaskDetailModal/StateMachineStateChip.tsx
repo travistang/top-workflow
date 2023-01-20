@@ -1,6 +1,6 @@
 import React from 'react';
 import { TaskDTO } from '../../entities/Task';
-import { getTaskStateById, useTaskStateMachineOfTask } from '../../domain/TaskStateMachine';
+import { useTaskStateMachineOfTask } from '../../domain/TaskStateMachine';
 import { TaskStateColorMapping } from '../../domain/TaskState';
 import classNames from 'classnames';
 

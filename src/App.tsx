@@ -8,6 +8,7 @@ import TodoListPage from "./pages/TodoListPage";
 import TaskDetailModal from "./components/TaskDetailModal";
 import SettingsPage from "./pages/SettingsPage";
 import TaskStateMachinePage from "./pages/TaskStateMachinePage";
+import TaskGraphPage from "./pages/TaskGraphPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="/flow" element={<>Flow</>} />
               <Route path="/stateMachine" element={<TaskStateMachinePage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/graph/:id" element={<TaskGraphPage />} />
             </Routes>
           </div>
           <TaskDetailModal />

@@ -6,8 +6,9 @@ import Checkbox from '../../Input/Checkbox';
 
 type Props = {
   task: CachedTask;
+  className?: string;
 }
-export default function TaskCompleteCheckbox({ task }: Props) {
+export default function TaskCompleteCheckbox({ className, task }: Props) {
   const isUsingStateMachine = !!task.stateMachine;
   const { update } = useTaskManager();
 
@@ -19,6 +20,6 @@ export default function TaskCompleteCheckbox({ task }: Props) {
   }
 
   return (
-    <Checkbox checked={completed} onCheck={onToggleState} />
+    <Checkbox checked={completed} onCheck={onToggleState} className={className} />
   )
 }
