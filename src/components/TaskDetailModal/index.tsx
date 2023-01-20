@@ -1,8 +1,6 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import {
-  VscEye,
-  VscEyeClosed,
   VscPinned,
   VscPinnedDirty,
   VscSave,
@@ -10,7 +8,8 @@ import {
 } from "react-icons/vsc";
 import { useRecoilState } from "recoil";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
-import { CachedTask, focusedTaskSelector } from "../../atoms/tasks";
+import { CachedTask } from "../../atoms/tasks";
+import { useTaskValidation } from "../../domain/Task";
 import useTaskManager from "../../domain/TaskManager";
 import { TaskDTO, TaskState } from "../../entities/Task";
 import { Modifier } from "../../utils/object";
@@ -21,18 +20,17 @@ import TaskStateDropdown from "../Input/TaskStateDropdown";
 import TextInput from "../Input/TextInput";
 import Modal from "../Modal";
 import StateMachineStateChip from "./StateMachineStateChip";
+import TaskFocusToggle from "./TaskFocusToggle";
 import TaskStateMachinePicker from "./TaskStateMachinePicker";
 
 export default function TaskDetailModal() {
   const [taskDetail, setTaskDetail] = useRecoilState(taskDetailModalAtom);
-  const [focusedTask, setFocusedTask] = useRecoilState(focusedTaskSelector);
   const [taskPlaceHolder, setTaskPlaceholder] = useState<CachedTask | null>(
     null
   );
+  const isTaskPlaceholderValid = useTaskValidation(taskPlaceHolder);
   const taskManager = useTaskManager();
-  const isFocused = focusedTask && focusedTask.id === taskDetail?.id;
-  const isUsingStateMachine = !!taskDetail?.stateMachine;
-
+  const isUsingStateMachine = !!taskPlaceHolder?.stateMachine;
   useEffect(() => {
     setTaskPlaceholder(taskDetail);
   }, [taskDetail]);
@@ -51,12 +49,8 @@ export default function TaskDetailModal() {
   };
 
   const onCommitChanges = () => {
-    const isTaskFocused = focusedTask?.id === taskPlaceHolder.id;
-    const updatedPayload: CachedTask = {
-      ...taskPlaceHolder,
-      focused: isTaskFocused,
-    };
-    taskManager.upsert(updatedPayload);
+    if (!isTaskPlaceholderValid) return;
+    taskManager.upsert(taskPlaceHolder);
     onClose();
   };
 
@@ -98,15 +92,7 @@ export default function TaskDetailModal() {
             >
               {taskPlaceHolder.flagged ? <VscPinnedDirty /> : <VscPinned />}
             </Button>
-            <Button
-              className={classNames(
-                "flex items-center gap-2 px-2 bg-secondary h-8 rounded-lg flex-shrink-0",
-                !isFocused ? "bg-secondary" : "bg-text bg-opacity-20"
-              )}
-              onClick={() => setFocusedTask(isFocused ? null : taskDetail)}
-            >
-              {!isFocused ? <VscEyeClosed /> : <VscEye />}
-            </Button>
+            <TaskFocusToggle task={taskPlaceHolder} />
             {isUsingStateMachine ?
               <StateMachineStateChip task={taskPlaceHolder} /> :
               <TaskStateDropdown
@@ -162,6 +148,7 @@ export default function TaskDetailModal() {
           Delete
         </Button>
         <Button
+          disabled={!isTaskPlaceholderValid}
           onClick={onCommitChanges}
           theme={ButtonTheme.Success}
           className={classNames(
