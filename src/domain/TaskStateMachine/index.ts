@@ -1,3 +1,4 @@
+
 import { XYPosition } from "reactflow";
 import { TaskState as BaseTaskState } from "../../entities/Task";
 import {
@@ -89,15 +90,15 @@ export const getTransitionsFromState = (
 
 export const getReachableNextState = (
   stateMachine: TaskStateMachine,
-  currentStateId: string,
+  currentStateId?: string,
   includeCurrentState = false
 ): TaskState[] => {
-  const currentState = getTaskStateById(stateMachine, currentStateId);
-  if (!currentState) return stateMachine.states;
+  const currentState = getTaskStateById(stateMachine, currentStateId ?? '');
+  if (!currentState || !currentStateId) return stateMachine.states;
 
   const reachableNextStates = getTransitionsFromState(
     stateMachine,
-    currentStateId
+    currentStateId,
   ).map((transition) => transition.toId);
 
   const nonEmptyNextStates = reachableNextStates

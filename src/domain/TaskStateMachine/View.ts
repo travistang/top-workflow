@@ -12,7 +12,6 @@ export type ComputeTaskStateMachineViewProps = {
   updateStateMachine?: (newStateMachine: TaskStateMachine) => void;
   currentStateId?: string;
   selectedStateId?: string;
-  selectableStates?: string[];
   highlightedStates: Record<string, TaskStateNodeHighlight>;
   onSelectState?: (stateId: string) => void;
 };
@@ -67,7 +66,6 @@ const mapStateToNode = (
   props: ComputeTaskStateMachineViewProps
 ): Node<TaskStateNodeData> => {
   const {
-    selectableStates,
     onSelectState,
     editable,
     stateMachine,
@@ -75,11 +73,9 @@ const mapStateToNode = (
     currentStateId,
     highlightedStates,
   } = props;
-  const canStateBeSelected =
-    !selectableStates || selectableStates?.includes(state.id);
-  const onSelect = canStateBeSelected
-    ? () => onSelectState?.(state.id)
-    : undefined;
+  const highlightType =
+    highlightedStates[state.id] ?? TaskStateNodeHighlight.None;
+  const onSelect = () => onSelectState?.(state.id);
   return {
     id: state.id,
     data: {
@@ -89,7 +85,7 @@ const mapStateToNode = (
       updateStateMachine,
       onSelect,
       currentStateId,
-      highlightType: highlightedStates[state.id] ?? TaskStateNodeHighlight.None,
+      highlightType,
     },
     position: state.position,
     connectable: editable,

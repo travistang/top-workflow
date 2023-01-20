@@ -11,6 +11,7 @@ export type ColorConfig = {
   icon: React.ReactNode;
   text: string;
 };
+
 export const TaskStateColorMapping: Record<TaskState, ColorConfig> = {
   [TaskState.Pending]: {
     background: "bg-text-secondary",

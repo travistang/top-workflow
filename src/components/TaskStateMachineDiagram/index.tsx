@@ -13,7 +13,6 @@ type Props = {
   taskStateMachine: TaskStateMachine;
   onUpdateStateMachine?: (stateMachine: TaskStateMachine) => void;
   currentStateId?: string;
-  selectableStates?: string[];
   highlightedStates?: Record<string, TaskStateNodeHighlight>,
   onSelectState?: (stateId: string) => void;
   className?: string;
@@ -28,7 +27,6 @@ export default function TaskStateMachineDiagram({
   taskStateMachine,
   onUpdateStateMachine,
   currentStateId,
-  selectableStates,
   highlightedStates = { },
   onSelectState,
   editable,
@@ -50,7 +48,6 @@ export default function TaskStateMachineDiagram({
     onSelectState,
     currentStateId,
     highlightedStates,
-    selectableStates,
   });
 
   return (

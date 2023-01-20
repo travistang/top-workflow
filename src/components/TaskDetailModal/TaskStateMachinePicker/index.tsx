@@ -32,7 +32,7 @@ export default function TaskStateMachinePicker({
     )
     : undefined;
 
-  const { selectableStates, onSelectState } = useTaskStateDiagramProps({ state, selectedTaskStateMachine, updateTaskDetails, initialStateMachine });
+  const { onSelectState, highlightedStates } = useTaskStateDiagramProps({ state, selectedTaskStateMachine, updateTaskDetails, initialStateMachine });
 
   if (!availableStateMachines?.length) return null;
 
@@ -53,6 +53,7 @@ export default function TaskStateMachinePicker({
       <Dropdown
         label="Using state machine"
         className="col-span-3"
+        dropdownClassName="z-50"
         options={dropdownOptions}
         onSelect={selectNewStateMachine}
         value={selectedTaskStateMachine?.id ?? ""}
@@ -68,8 +69,8 @@ export default function TaskStateMachinePicker({
           </Button>
           <ReactFlowProvider>
             <TaskStateMachineDiagram
+              highlightedStates={highlightedStates}
               currentStateId={state?.stateId}
-              selectableStates={selectableStates}
               onSelectState={onSelectState}
               taskStateMachine={selectedTaskStateMachine}
               className="col-span-full h-[33vh] w-full"

@@ -12,7 +12,7 @@ import { useRecoilState } from "recoil";
 import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
 import { CachedTask, focusedTaskSelector } from "../../atoms/tasks";
 import useTaskManager from "../../domain/TaskManager";
-import { TaskDTO } from "../../entities/Task";
+import { TaskDTO, TaskState } from "../../entities/Task";
 import { Modifier } from "../../utils/object";
 import Button, { ButtonTheme } from "../Input/Button";
 import DateInput from "../Input/Dropdown/DateInput";
@@ -20,6 +20,7 @@ import LabelInput from "../Input/LabelInput";
 import TaskStateDropdown from "../Input/TaskStateDropdown";
 import TextInput from "../Input/TextInput";
 import Modal from "../Modal";
+import StateMachineStateChip from "./StateMachineStateChip";
 import TaskStateMachinePicker from "./TaskStateMachinePicker";
 
 export default function TaskDetailModal() {
@@ -30,6 +31,7 @@ export default function TaskDetailModal() {
   );
   const taskManager = useTaskManager();
   const isFocused = focusedTask && focusedTask.id === taskDetail?.id;
+  const isUsingStateMachine = !!taskDetail?.stateMachine;
 
   useEffect(() => {
     setTaskPlaceholder(taskDetail);
@@ -65,6 +67,19 @@ export default function TaskDetailModal() {
     });
   };
 
+  const updateTaskState = (newState: string | TaskState) => {
+    if (Object.values(TaskState).includes(newState as TaskState)) {
+      updatePlaceHolder('state')(newState as TaskState);
+      return;
+    }
+    if (taskPlaceHolder.stateMachine) {
+      updatePlaceHolder('stateMachine')({
+        ...taskPlaceHolder.stateMachine,
+        stateId: newState as string,
+      });
+    }
+  }
+
   return (
     <Modal onClose={onClose}>
       <div
@@ -92,13 +107,14 @@ export default function TaskDetailModal() {
             >
               {!isFocused ? <VscEyeClosed /> : <VscEye />}
             </Button>
-            <TaskStateDropdown
-              className="flex-shrink-0 bg-opacity-0"
-              value={taskPlaceHolder.state}
-              onChange={(newState) =>
-                setTaskPlaceholder({ ...taskPlaceHolder, state: newState })
-              }
-            />
+            {isUsingStateMachine ?
+              <StateMachineStateChip task={taskPlaceHolder} /> :
+              <TaskStateDropdown
+                className="flex-shrink-0 bg-opacity-0"
+                task={taskPlaceHolder}
+                onChange={updateTaskState}
+              />
+            }
           </div>
         </div>
         <TextInput

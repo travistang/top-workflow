@@ -1,11 +1,10 @@
 import React from "react";
-import { capitalize } from "../../utils/strings";
 import { TaskStateColorMapping } from "../../domain/TaskState";
-import { TaskState } from "../../entities/Task";
+import { TaskDTO, TaskState } from "../../entities/Task";
 import Dropdown from "./Dropdown";
 
 type Props = {
-  value: TaskState;
+  task: TaskDTO;
   onChange: (state: TaskState) => void;
   className?: string;
   label?: string;
@@ -13,25 +12,21 @@ type Props = {
 
 export default function TaskStateDropdown({
   className,
-  value,
+  task,
   label,
   onChange,
 }: Props) {
-  const options = Object.entries(TaskStateColorMapping).map(
-    ([taskState, options]) => ({
-      value: taskState as TaskState,
-      icon: options.icon,
-      className: 'text-text',
-      label: capitalize(taskState as string),
-    })
-  );
   return (
     <Dropdown
       className={className}
-      inputClassName={TaskStateColorMapping[value].background}
-      value={value}
+      inputClassName={TaskStateColorMapping[task.state].background}
+      value={task.state}
       label={label}
-      options={options}
+      options={Object.values(TaskState).map((possibleState) => ({
+        label: possibleState,
+        value: possibleState,
+        icon: TaskStateColorMapping[possibleState].icon,
+      }))}
       onSelect={onChange}
     />
   );
