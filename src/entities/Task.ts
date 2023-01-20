@@ -11,7 +11,7 @@ export type TaskStateMachineState = {
 export interface TaskDTO {
   id: string;
   name: string;
-  parentId?: string;
+  parentId?: string[];
   labels: string[];
   description: string;
   createdAt: number;

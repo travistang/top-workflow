@@ -5,6 +5,7 @@ import createTask from "./modules/createTask";
 import getAllSubTasks from "./modules/getAllSubTasks";
 import getDerivedState from "./modules/getDerivedState";
 import getParentTaskChain from "./modules/getParentTaskChain";
+import getRootTasks from "./modules/getRootTask";
 import getStemTasks from "./modules/getStemTasks";
 import toggleFocus from "./modules/toggleHighlight";
 import { TaskManagerHandlerProps } from "./types";
@@ -38,8 +39,10 @@ export default function useTaskManager() {
   };
 
   const remove = async (id: string) => {
-    const removedIds = await TaskRepository.remove(id);
-    const remainingEntries = Object.entries(tasks).filter(([id]) => !removedIds.includes(id));
+    const allSubTasks = getAllSubTasks(props)(get(id));
+    const removingIds = [...allSubTasks.map(subTask => subTask.id), id];
+    await Promise.all(removingIds.map(removingId => TaskRepository.remove(removingId)));
+    const remainingEntries = Object.entries(tasks).filter(([id]) => !removingIds.includes(id));
     setTasks(Object.fromEntries(remainingEntries));
   }
 
@@ -47,6 +50,7 @@ export default function useTaskManager() {
     get,
     tasks,
     createTask: createTask(props),
+    getRootTasks: getRootTasks(props),
     getStemTasks: getStemTasks(props),
     getParentTaskChain: getParentTaskChain(props),
     upsert,

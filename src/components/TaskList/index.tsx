@@ -3,7 +3,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 import classNames from 'classnames';
 import { useRecoilValue } from 'recoil';
-import { focusedTaskSelector, taskWithParentIdSelector } from '../../atoms/tasks';
+import { focusedTaskSelector } from '../../atoms/tasks';
 import { getSortedTaskItems, PARENT_DROP_ID } from '../../domain/DragAndDrop';
 import useTaskManager from '../../domain/TaskManager';
 import CreateTaskPanel from '../CreateTaskPanel';
@@ -14,7 +14,7 @@ export default function TaskList() {
   const [creatingTask, setCreatingTask] = useState(false);
   const focusedTask = useRecoilValue(focusedTaskSelector);
   const taskManager = useTaskManager();
-  const parentTasks = useRecoilValue(taskWithParentIdSelector(undefined));
+  const parentTasks = taskManager.getRootTasks();
   const { setNodeRef, isOver } = useDroppable({ id: PARENT_DROP_ID });
   const onAddTask = (name: string) => {
     taskManager.createTask({ name });

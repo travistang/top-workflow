@@ -26,26 +26,17 @@ class TaskRepository extends Dexie {
     return this.tasks.add(dto);
   }
 
-  private async computeOrder(parentId?: string) {
-    const filterConfig: TaskFilterConfig = {
-      parentId: parentId ? { equals: parentId } : { exists: false },
-    };
-
-    const siblingTasks = await this.find(filterConfig);
-    return (siblingTasks.map(sibling => sibling.order).sort().pop() ?? 0) + 1;
-  }
-
   async createTaskByName(name: string, parentId?: string) {
     const now = Date.now();
     const newTaskDto: TaskDTO = {
       name,
-      parentId,
+      parentId: parentId ? [parentId] : [],
       description: "",
       labels: [],
       createdAt: now,
       modifiedAt: now,
       state: TaskState.Pending,
-      order: await this.computeOrder(parentId),
+      order: 1,
       history: [{ state: TaskState.Pending, date: now }],
       id: window.crypto.randomUUID(),
     };
@@ -68,10 +59,8 @@ class TaskRepository extends Dexie {
   }
 
   async remove(id: string) {
-    const subTasksOfTask = await this.find({ parentId: {equals: id} });
-    const removingIds = [...subTasksOfTask.map((subTask) => subTask.id), id];
-    await this.tasks.bulkDelete(removingIds);
-    return removingIds;
+    await this.tasks.delete(id);
+    return id;
   }
 
   private buildFilter(taskFilter: TaskFilter, sorting: SortConfig<TaskDTO>) {

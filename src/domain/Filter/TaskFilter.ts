@@ -14,12 +14,6 @@ export type TaskFilterConfig = Partial<
 export default class TaskFilter extends Filter<TaskDTO, TaskFilterConfig> {
   matches(testValue: TaskDTO): boolean {
     if (
-      this.config.parentId &&
-      !new StringFilter(this.config.parentId).matches(testValue.parentId)
-    ) {
-      return false;
-    }
-    if (
       this.config.name &&
       !new StringFilter(this.config.name).matches(testValue.name)
     ) {

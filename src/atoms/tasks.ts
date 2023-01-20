@@ -60,7 +60,7 @@ export const subTaskAtom = selectorFamily<TaskDTO[], string>({
   get:
     (taskId) =>
     ({ get }) =>
-      Object.values(get(taskAtom)).filter((task) => task.parentId === taskId),
+      Object.values(get(taskAtom)).filter((task) => task.parentId?.includes(taskId)),
 });
 
 export const focusedTaskSelector = selector<CachedTask | null>({
@@ -89,17 +89,6 @@ export const focusedTaskSelector = selector<CachedTask | null>({
       )
     );
   },
-});
-
-export const taskWithParentIdSelector = selectorFamily<
-  CachedTask[],
-  string | undefined
->({
-  key: "task-with-parent-id-selector",
-  get:
-    (taskId: string | undefined) =>
-    ({ get }) =>
-      Object.values(get(taskAtom)).filter((task) => task.parentId === taskId),
 });
 
 export default taskAtom;

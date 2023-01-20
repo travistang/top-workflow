@@ -4,7 +4,7 @@ import { TaskManagerHandler, TaskManagerHandlerProps } from "../types";
 const getAllSubTasks: TaskManagerHandler<CachedTask, CachedTask[]> =
   (props: TaskManagerHandlerProps) => (task: CachedTask) => {
     return props.allTasks.filter(
-      (maybeSubTask) => task.id === maybeSubTask.parentId
+      (maybeSubTask) => maybeSubTask.parentId?.includes(task.id),
     );
   };
 
