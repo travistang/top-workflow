@@ -1,11 +1,13 @@
 
+import { useLiveQuery } from "dexie-react-hooks";
 import { XYPosition } from "reactflow";
-import { TaskState as BaseTaskState } from "../../entities/Task";
+import { TaskDTO, TaskState as BaseTaskState } from "../../entities/Task";
 import {
   TaskState,
   TaskStateMachine,
   TaskStateTransition,
 } from "../../entities/TaskStateMachine";
+import TaskStateMachineRepository from "../../repositories/TaskStateMachineRepository";
 
 export const generateTaskState = (
   name: string,
@@ -109,3 +111,17 @@ export const getReachableNextState = (
     ? [...nonEmptyNextStates, currentState]
     : nonEmptyNextStates;
 };
+
+export const useTaskStateMachineOfTask = (task: TaskDTO) => {
+    const { stateMachine } = task;
+    const stateMachineConfig = useLiveQuery(
+      () => TaskStateMachineRepository.get(stateMachine?.stateMachineId ?? ""),
+      [stateMachine]
+    );
+  const currentState = stateMachineConfig ? getTaskStateById(
+    stateMachineConfig ,
+    stateMachine?.stateId ?? ""
+  ) : null;
+
+  return { taskStateMachine: stateMachineConfig, currentState };
+}

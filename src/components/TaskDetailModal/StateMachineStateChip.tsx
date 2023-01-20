@@ -1,8 +1,6 @@
 import React from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { TaskDTO } from '../../entities/Task';
-import TaskStateMachineRepository from '../../repositories/TaskStateMachineRepository';
-import { getTaskStateById } from '../../domain/TaskStateMachine';
+import { getTaskStateById, useTaskStateMachineOfTask } from '../../domain/TaskStateMachine';
 import { TaskStateColorMapping } from '../../domain/TaskState';
 import classNames from 'classnames';
 
@@ -10,21 +8,17 @@ type Props = {
   task: TaskDTO;
 }
 export default function StateMachineStateChip({ task }: Props) {
-  const { stateMachine } = task;
-  const stateMachineConfig = useLiveQuery(() => TaskStateMachineRepository.get(stateMachine?.stateMachineId ?? ''), [stateMachine]);
+  const { taskStateMachine, currentState } = useTaskStateMachineOfTask(task);
+  if (!taskStateMachine || !currentState) return null;
 
-  if (!stateMachineConfig || !stateMachine?.stateId) return null;
 
-  const currentTaskState = getTaskStateById(stateMachineConfig, stateMachine?.stateId);
-  if (!currentTaskState) return null;
-
-  const { icon, background } = TaskStateColorMapping[currentTaskState.impliedState];
+  const { icon, background } = TaskStateColorMapping[currentState.impliedState];
 
   return (
     <div className={classNames("flex items-center justify-center px-2 rounded-lg gap-2 h-8", background)}>
       {icon}
       <span className="capitalize">
-        {currentTaskState.name}
+        {currentState.name}
       </span>
     </div>
   )

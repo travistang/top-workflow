@@ -1,14 +1,15 @@
 import React from "react";
 import classNames from "classnames";
-import { TaskState } from "../../entities/Task";
-import DueDateText from "./DueDateText";
+import { TaskState } from "../../../entities/Task";
+import DueDateText from "../DueDateText";
 import { VscAdd, VscKebabVertical } from "react-icons/vsc";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { CachedTask, subTaskAtom } from "../../atoms/tasks";
-import ExpandIcon from "./ExpandIcon";
-import { TaskStateColorMapping } from "../../domain/TaskState";
-import { taskDetailModalAtom } from "../../atoms/taskDetailModal";
-import { useExpandTask } from "../../atoms/expandedTask";
+import { CachedTask, subTaskAtom } from "../../../atoms/tasks";
+import ExpandIcon from "../ExpandIcon";
+import { TaskStateColorMapping } from "../../../domain/TaskState";
+import { taskDetailModalAtom } from "../../../atoms/taskDetailModal";
+import { useExpandTask } from "../../../atoms/expandedTask";
+import TaskCompleteCheckbox from "./TaskCompleteCheckbox";
 
 type Props = {
   task: CachedTask;
@@ -42,6 +43,7 @@ export default function TaskItem({
   }
   return (
     <div
+      data-component="task-item"
       onClick={toggleExpand}
       className={classNames(
         "px-2 py-3 flex items-center gap-2 whitespace-wrap",
@@ -51,6 +53,7 @@ export default function TaskItem({
     >
       <ExpandIcon hasSubTask={hasSubTask} expanded={expanded} />
       {stateIcon}
+      <TaskCompleteCheckbox task={task} />
       <div className="flex flex-col">
         <span className={classNames("bg-opacity-0", isSubTask && 'text-sm')}>{task.name}</span>
         {task.dueDate && <DueDateText dueDate={task.dueDate} />}

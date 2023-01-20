@@ -4,7 +4,9 @@ import {
   VscRefresh,
   VscStopCircle,
 } from "react-icons/vsc";
+import { CachedTask } from "../atoms/tasks";
 import { TaskState } from "../entities/Task";
+import { useTaskStateMachineOfTask } from "./TaskStateMachine";
 
 export type ColorConfig = {
   background: string;
@@ -29,3 +31,8 @@ export const TaskStateColorMapping: Record<TaskState, ColorConfig> = {
     text: "text-primary",
   },
 };
+
+export const useComputedState = (task: CachedTask) => {
+  const { currentState } = useTaskStateMachineOfTask(task);
+  return currentState?.impliedState ?? task.state;
+}
