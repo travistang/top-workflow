@@ -14,7 +14,7 @@ export type ColorConfig = {
 
 export const TaskStateColorMapping: Record<TaskState, ColorConfig> = {
   [TaskState.Pending]: {
-    background: "bg-text-secondary",
+    background: "bg-neutral",
     icon: <VscRefresh />,
     text: "text-text",
   },
@@ -24,7 +24,7 @@ export const TaskStateColorMapping: Record<TaskState, ColorConfig> = {
     text: "text-accent",
   },
   [TaskState.Completed]: {
-    background: "bg-primary bg-opacity-70",
+    background: "bg-success bg-opacity-70",
     icon: <VscCheck />,
     text: "text-primary",
   },

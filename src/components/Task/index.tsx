@@ -29,7 +29,7 @@ export default function Task({ task, className, depth = 1 }: Props) {
   const shouldHighlightWithDerviedState = derivedState && [TaskState.Completed, TaskState.Blocked].includes(derivedState);
 
   const onAddNewTask = async (subTaskName: string) => {
-    await taskManager.createTask({name: subTaskName, parentId: task.id});
+    await taskManager.createTask({ name: subTaskName, parentId: task.id });
     forceExpand();
   };
   const expanded = expandedTodoIds.includes(task.id);
@@ -38,7 +38,7 @@ export default function Task({ task, className, depth = 1 }: Props) {
       data-component="todo"
       onClick={(e) => e.stopPropagation()}
       className={classNames(
-        "flex flex-col items-stretch min-w-[100vw] sm:min-w-[50vw] my-1 sticky left-0 rounded-lg",
+        "flex flex-col items-stretch my-1 sticky left-0 rounded-lg",
         className
       )}
       ref={setNodeRef}

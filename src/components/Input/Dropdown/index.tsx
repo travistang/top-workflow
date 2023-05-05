@@ -55,7 +55,7 @@ export default function Dropdown<T>({
         {expanded && (
           <div
             className={classNames(
-              "absolute top-full translate-y-1 w-full left-0 flex flex-col items-stretch gap-2 p-2 rounded-lg bg-text-secondary",
+              "absolute top-full translate-y-1 w-full left-0 flex flex-col items-stretch gap-2 p-2 rounded-lg bg-primary",
               dropdownClassName
             )}
           >

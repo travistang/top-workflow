@@ -41,7 +41,7 @@ export default function TaskStateMachineOverview({
         onChange={onChangeName}
       />}
       <Button
-        className="bg-text-secondary"
+        className="bg-secondary"
         onClick={editing ? onCancelEdit : editStateMachine}
       >
         {editing ? <VscRemove /> : <VscEdit />}

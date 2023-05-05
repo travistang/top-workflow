@@ -14,6 +14,6 @@ module.exports = {
       "secondary-alt": "rgb(var(--color-secondary-alt) / <alpha-value>)",
     },
   },
-  plugins: [],
+    plugins: [require("daisyui")],
   important: true,
 };

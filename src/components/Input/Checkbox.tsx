@@ -16,9 +16,9 @@ export default function Checkbox({ onCheck, checked, className }: Props) {
       onClick={onClick}
       className={classNames(
         'h-6 w-6 flex-shrink-0 rounded-full border flex items-center justify-center p-1',
-        checked && "border-primary",
+        checked && "border-success",
         className)}>
-      {checked && <span className="bg-primary rounded-full h-full w-full" />}
+      {checked && <span className="bg-success rounded-full h-full w-full" />}
     </div>
   );
 }
